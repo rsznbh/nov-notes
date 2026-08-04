@@ -888,18 +888,28 @@
     document.addEventListener('mousemove', function (e) {
       if (!pupilL || !pupilR) return;
       var rect = pet.getBoundingClientRect();
-      var cx = rect.left + 99;
-      var cy = rect.top + 59;
-      var dx = e.clientX - cx;
-      var dy = e.clientY - cy;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      var maxD = 3.5;
-      var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * 0.08) : 0;
-      var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * 0.08) : 0;
-      pupilL.setAttribute('cx', (52 + mx).toFixed(1));
-      pupilL.setAttribute('cy', (39 + my).toFixed(1));
-      pupilR.setAttribute('cx', (79 + mx).toFixed(1));
-      pupilR.setAttribute('cy', (39 + my).toFixed(1));
+      // SVG viewBox 到 CSS 像素的缩放比
+      var svgW = 132, svgH = 114;
+      var sx = rect.width / svgW, sy = rect.height / svgH;
+      // 眼睛中心在 viewBox 中的坐标
+      var eyeLCX = 52, eyeLCY = 39;
+      var eyeRCX = 79, eyeRCY = 39;
+      var maxD = 1.5; // viewBox 单位，最大偏移量（眼睛半径6 - 瞳孔半径4 = 2）
+      var sens = 0.02; // 灵敏度
+
+      function track(eyeCX, eyeCY, pupil) {
+        var cx = rect.left + eyeCX * sx;
+        var cy = rect.top + eyeCY * sy;
+        var dx = e.clientX - cx;
+        var dy = e.clientY - cy;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * sx * sens) : 0;
+        var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * sy * sens) : 0;
+        pupil.setAttribute('cx', (eyeCX + mx).toFixed(1));
+        pupil.setAttribute('cy', (eyeCY + my).toFixed(1));
+      }
+      track(eyeLCX, eyeLCY, pupilL);
+      track(eyeRCX, eyeRCY, pupilR);
     });
 
     // 拖拽
@@ -918,15 +928,15 @@
       if (clawL) clawL.style.animation = 'none';
       if (clawR) clawR.style.animation = 'none';
       // 张大嘴
-      if (mouth) mouth.setAttribute('d', 'M61 58 Q66 66 71 58');
+      if (mouth) mouth.setAttribute('d', 'M58 58 Q66 68 74 58');
     });
 
     document.addEventListener('mousemove', function (e) {
       if (!dragging) return;
       var newX = e.clientX - dragOffX;
       var newY = e.clientY - dragOffY;
-      newX = Math.max(0, Math.min(window.innerWidth - 132, newX));
-      newY = Math.max(0, Math.min(window.innerHeight - 114, newY));
+      newX = Math.max(0, Math.min(window.innerWidth - 106, newX));
+      newY = Math.max(0, Math.min(window.innerHeight - 91, newY));
       pet.style.left = newX + 'px';
       pet.style.top = newY + 'px';
       pet.style.bottom = 'auto';
@@ -1077,7 +1087,7 @@
       ];
       var msg = phrases[Math.floor(Math.random() * phrases.length)];
       showSpeech(msg);
-      if (mouth) mouth.setAttribute('d', 'M61 58 Q66 66 71 58');
+      if (mouth) mouth.setAttribute('d', 'M58 58 Q66 68 74 58');
       setTimeout(function () { if (mouth) mouth.setAttribute('d', 'M61 60 Q66 64 71 60'); }, 2500);
     });
 
@@ -1368,6 +1378,10 @@
   var activeNoteId = null;
   var currentView = 'home';
   var catsArr = []; // 缓存分类数据
+  var editorMode = false; // 是否处于编辑模式
+  var editingNote = null; // 当前正在编辑的笔记
+  var editorSavedCatId = null; // 编辑器中的默认分类
+  var cleanupInlineEditor = null; // 清理函数
 
   // ==================== 工具函数 ====================
 
@@ -1554,9 +1568,9 @@
       '<div class="note-header">' +
       '<h1 class="note-title">' + escHtml(note.title) + '</h1>' +
       '<div class="note-actions">' +
-      '<button class="note-action-btn btn-edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>编辑</button>' +
-      '<button class="note-action-btn btn-rename"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>重命名</button>' +
-      '<button class="note-action-btn danger btn-delete"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>删除</button>' +
+      '<button class="note-action-btn btn-edit" data-note-id="' + note.id + '"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>编辑</button>' +
+      '<button class="note-action-btn btn-rename" data-note-id="' + note.id + '"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>重命名</button>' +
+      '<button class="note-action-btn danger btn-delete" data-note-id="' + note.id + '"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>删除</button>' +
       '</div></div>' +
       '<div class="note-meta">📁 ' + escHtml(catName) + '  |  🕐 更新于 ' + formatFullDate(note.updatedAt) +
       (note.tags && note.tags.length ? '  |  🏷 ' + escHtml(note.tags.join(', ')) : '') +
@@ -1564,16 +1578,20 @@
 
     mc.querySelector('.btn-edit').addEventListener('click', function () { openEditor(note); });
     mc.querySelector('.btn-rename').addEventListener('click', async function () {
-      var name = prompt('输入新标题：', note.title);
-      if (name && name.trim()) { await storage.updateNote(note.id, { title: name.trim() }); renderNoteView(note.id); }
+      var nid = parseInt(this.dataset.noteId);
+      var n = await storage.getNoteById(nid);
+      if (!n) return;
+      var name = prompt('输入新标题：', n.title);
+      if (name && name.trim()) { await storage.updateNote(nid, { title: name.trim() }); renderNoteView(nid); }
     });
     mc.querySelector('.btn-delete').addEventListener('click', async function () {
+      var nid = parseInt(this.dataset.noteId);
       if (confirm('确定删除这篇笔记？此操作不可恢复。')) {
-        await storage.deleteNote(note.id); renderSidebar(); navigateTo(null);
+        await storage.deleteNote(nid); renderSidebar(); navigateTo(null);
       }
     });
 
-    // 搜索关键词定位：在渲染后的内容中查找并滚动到第一个匹配位置
+    // 搜索关键词定位
     if (keyword && keyword.trim().length > 0) {
       scrollToKeyword(mc.querySelector('.md-content'), keyword.trim());
     }
@@ -1761,60 +1779,121 @@
     return html;
   }
 
-  async function openEditor(note, defaultCatId) {
-    var overlay = document.getElementById('editor-overlay');
-    var titleIn = document.getElementById('editor-title');
-    var contentIn = document.getElementById('editor-content');
-    var catSel = document.getElementById('editor-category');
+  // ==================== 原地编辑模式 ====================
+
+  // 进入编辑模式：右侧原地切换为编辑器
+  function enterEditMode(note) {
+    var mc = document.getElementById('main-content');
+    if (!mc) return;
+    editingNote = note;
+    editorMode = true;
+    mc.classList.add('edit-mode');
+    var badge = document.getElementById('mode-badge');
+    if (badge) badge.classList.add('visible');
+
+    buildInlineEditor(note).then(function () {
+      var titleIn = document.getElementById('edit-title-input');
+      if (titleIn) titleIn.focus();
+    });
+  }
+
+  // 退出编辑模式：切回阅读视图
+  function exitEditMode(refreshNoteId) {
+    var mc = document.getElementById('main-content');
+    if (!mc) return;
+    editorMode = false;
+    editingNote = null;
+    mc.classList.remove('edit-mode');
+    var badge = document.getElementById('mode-badge');
+    if (badge) badge.classList.remove('visible');
+
+    // 移除编辑器内联事件
+    if (cleanupInlineEditor) { cleanupInlineEditor(); cleanupInlineEditor = null; }
+
+    if (refreshNoteId) {
+      openNote(refreshNoteId);
+    } else {
+      // 取消后回到之前状态
+      if (activeNoteId) {
+        openNote(activeNoteId);
+      } else {
+        renderHome();
+      }
+    }
+  }
+
+  async function buildInlineEditor(note) {
+    var mc = document.getElementById('main-content');
     var cats = await storage.getAllCategories();
-    var targetCatId = note ? note.categoryId : defaultCatId;
-    catSel.innerHTML = buildCategoryOptions(cats, targetCatId);
+    var targetCatId = note ? note.categoryId : (cats.length > 0 ? cats[0].id : null);
 
-    if (note) { titleIn.value = note.title; contentIn.value = note.content; catSel.value = note.categoryId; }
-    else { titleIn.value = ''; contentIn.value = ''; if (cats.length > 0 && !defaultCatId) catSel.value = cats[0].id; }
+    var html = '<div class="editor-inline">' +
+      '<div class="edit-header">' +
+      '<input type="text" class="edit-title-input" id="edit-title-input" placeholder="笔记标题" value="' + (note && note.title ? escHtml(note.title) : '') + '">' +
+      '<select class="edit-category-select" id="edit-category-select">' + buildCategoryOptions(cats, targetCatId) + '</select>' +
+      '<div class="edit-actions">' +
+      '<button class="edit-btn" id="edit-cancel-btn">取消</button>' +
+      '<button class="edit-btn primary" id="edit-save-btn">保存</button>' +
+      '</div></div>' +
+      '<textarea class="edit-textarea" id="edit-content-textarea" placeholder="在此编写 Markdown 笔记...">' + (note && note.content ? escHtml(note.content) : '') + '</textarea>' +
+      '</div>';
 
-    overlay.classList.add('active');
-    if (!note) titleIn.focus();
+    mc.innerHTML = html;
 
-    contentIn.addEventListener('keydown', tabHandler);
-
-    var saveBtn = document.getElementById('editor-save');
-    var cancelBtn = document.getElementById('editor-cancel');
+    var titleIn = document.getElementById('edit-title-input');
+    var catSel = document.getElementById('edit-category-select');
+    var contentIn = document.getElementById('edit-content-textarea');
+    var saveBtn = document.getElementById('edit-save-btn');
+    var cancelBtn = document.getElementById('edit-cancel-btn');
 
     var doSave = async function () {
       var title = titleIn.value.trim() || '无标题';
       var content = contentIn.value;
       var catId = parseInt(catSel.value);
       var nid;
-      if (note) { await storage.updateNote(note.id, { title: title, content: content, categoryId: catId }); nid = note.id; }
-      else { nid = await storage.addNote({ title: title, content: content, categoryId: catId }); }
+      if (note && note.id) {
+        await storage.updateNote(note.id, { title: title, content: content, categoryId: catId });
+        nid = note.id;
+      } else {
+        nid = await storage.addNote({ title: title, content: content, categoryId: catId });
+      }
       var all = await storage.getAllNotes(); rebuildSearchIndex(all);
-      closeEditor(); renderSidebar(); openNote(nid);
+      exitEditMode(nid);
+      renderSidebar();
     };
 
-    var doCancel = function () { closeEditor(); };
+    var doCancel = function () { exitEditMode(null); };
 
     var keyHandler = function (e) {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); doSave(); }
       if (e.key === 'Escape') doCancel();
     };
 
-    saveBtn._h = doSave; cancelBtn._h = doCancel;
-    saveBtn.addEventListener('click', saveBtn._h);
-    cancelBtn.addEventListener('click', cancelBtn._h);
+    contentIn.addEventListener('keydown', tabHandler);
+
+    saveBtn.addEventListener('click', doSave);
+    cancelBtn.addEventListener('click', doCancel);
     document.addEventListener('keydown', keyHandler);
-    overlay._cleanup = function () {
-      if (saveBtn._h) { saveBtn.removeEventListener('click', saveBtn._h); delete saveBtn._h; }
-      if (cancelBtn._h) { cancelBtn.removeEventListener('click', cancelBtn._h); delete cancelBtn._h; }
+
+    cleanupInlineEditor = function () {
+      saveBtn.removeEventListener('click', doSave);
+      cancelBtn.removeEventListener('click', doCancel);
       document.removeEventListener('keydown', keyHandler);
       contentIn.removeEventListener('keydown', tabHandler);
     };
   }
 
+  async function openEditor(note, defaultCatId) {
+    // 原地编辑模式
+    // 如果是新建（note 为 null）但有 defaultCatId，构造一个虚拟 note
+    if (!note && defaultCatId) {
+      note = { categoryId: defaultCatId };
+    }
+    enterEditMode(note);
+  }
+
   function closeEditor() {
-    var overlay = document.getElementById('editor-overlay');
-    overlay.classList.remove('active');
-    if (overlay._cleanup) { overlay._cleanup(); overlay._cleanup = null; }
+    exitEditMode(null);
   }
 
   function tabHandler(e) {
