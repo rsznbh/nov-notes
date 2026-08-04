@@ -2290,14 +2290,11 @@
         }
       });
 
-      // 导入按钮：弹出选择，区分 MD 文件和 JSON 备份
-      document.getElementById('btn-import').addEventListener('click', function () {
-        if (confirm('导入 Markdown 文件？\n\n确定 → 选择 .md 文件导入为笔记\n取消 → 选择 .json 备份文件恢复')) {
-          document.getElementById('md-file-input').click();
-        } else {
-          document.getElementById('json-file-input').click();
-        }
-      });
+      // 侧边栏：导入 MD 文件
+      document.getElementById('btn-import-md').addEventListener('click', function () { document.getElementById('md-file-input').click(); });
+
+      // 顶部：导入 JSON 备份
+      document.getElementById('btn-import').addEventListener('click', function () { document.getElementById('json-file-input').click(); });
 
       // MD 文件导入
       document.getElementById('md-file-input').addEventListener('change', async function (e) {
