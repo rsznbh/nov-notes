@@ -253,27 +253,15 @@
   /* 磨砂玻璃覆盖层 */
   .glass-panel{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:10px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--glass-shadow)}
 
-  /* ==================== 桌宠 ==================== */
-  .pet{position:fixed;bottom:16px;left:16px;z-index:500;width:52px;height:52px;cursor:grab;user-select:none;transition:transform .1s}
+  /* ==================== 桌宠 — 章鱼哥 ==================== */
+  .pet{position:fixed;bottom:16px;left:16px;z-index:500;width:64px;height:80px;cursor:grab;user-select:none;-webkit-user-select:none;-moz-user-select:none}
   .pet:active{cursor:grabbing}
-  .pet-body{width:52px;height:48px;background:var(--accent);border-radius:50% 50% 46% 46%;position:relative;animation:pet-breathe 3s ease-in-out infinite}
-  .pet-body::before{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:32px;height:8px;background:rgba(0,0,0,0.15);border-radius:50%;animation:pet-shadow 3s ease-in-out infinite}
-  @keyframes pet-breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.04)}}
-  @keyframes pet-shadow{0%,100%{transform:translateX(-50%) scaleX(1)}50%{transform:translateX(-50%) scaleX(0.85)}}
-  .pet-eye{position:absolute;top:14px;width:12px;height:14px;background:#fff;border-radius:50%;overflow:hidden}
-  .pet-eye.left{left:10px}
-  .pet-eye.right{right:10px}
-  .pet-pupil{position:absolute;width:7px;height:7px;background:#1a1a2e;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .08s}
-  .pet-pupil::after{content:'';position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;top:0;right:0}
-  .pet-mouth{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:10px;height:5px;border-bottom:2.5px solid #fff;border-radius:0 0 10px 10px;transition:all .2s}
-  .pet-mouth.open{height:10px;width:12px;border-radius:50%;border:2.5px solid #fff}
-  .pet-hat{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:18px;height:14px;background:var(--accent);border-radius:50% 50% 0 0;z-index:1}
-  .pet-hat::after{content:'';position:absolute;bottom:-2px;left:-4px;width:26px;height:4px;background:var(--accent);border-radius:2px}
-  .pet-speech{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;padding:4px 8px;font-size:11px;color:var(--text-secondary);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+  .pet-svg{width:64px;height:80px;overflow:visible}
+  .pet-speech{position:absolute;bottom:84px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text-secondary);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
   .pet-speech.show{opacity:1}
   .pet-speech::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid var(--border-color)}
-  .pet-idle{animation:pet-bounce 4s ease-in-out infinite}
-  @keyframes pet-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .pet-idle{animation:pet-bounce 3.5s ease-in-out infinite}
+  @keyframes pet-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
   @media(max-width:768px){.pet{display:none}}
 
   /* 自定义光标 */
@@ -413,15 +401,36 @@
     </div>
   </div>
 
-  <!-- 桌宠 -->
+  <!-- 桌宠 — 章鱼哥 -->
   <div class="pet" id="pet">
     <div class="pet-speech" id="pet-speech"></div>
-    <div class="pet-body">
-      <div class="pet-hat"></div>
-      <div class="pet-eye left"><div class="pet-pupil" id="pupil-l"></div></div>
-      <div class="pet-eye right"><div class="pet-pupil" id="pupil-r"></div></div>
-      <div class="pet-mouth" id="pet-mouth"></div>
-    </div>
+    <svg class="pet-svg" viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 身体 -->
+      <ellipse cx="32" cy="46" rx="18" ry="22" fill="#8CC464"/>
+      <!-- 头顶 -->
+      <ellipse cx="32" cy="26" rx="14" ry="10" fill="#8CC464"/>
+      <!-- 触角 -->
+      <line x1="26" y1="18" x2="22" y2="4" stroke="#8CC464" stroke-width="3" stroke-linecap="round"/>
+      <line x1="38" y1="18" x2="42" y2="4" stroke="#8CC464" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="22" cy="4" r="2" fill="#8CC464"/>
+      <circle cx="42" cy="4" r="2" fill="#8CC464"/>
+      <!-- 大眼睛 -->
+      <ellipse cx="26" cy="30" rx="7" ry="8" fill="#fff" stroke="#6B9E4E" stroke-width="0.5"/>
+      <ellipse cx="38" cy="30" rx="7" ry="8" fill="#fff" stroke="#6B9E4E" stroke-width="0.5"/>
+      <!-- 瞳孔 -->
+      <circle class="pet-pupil-l" cx="27" cy="31" r="3.5" fill="#2a1a0e"/>
+      <circle class="pet-pupil-r" cx="39" cy="31" r="3.5" fill="#2a1a0e"/>
+      <!-- 鼻子 -->
+      <ellipse cx="32" cy="37" rx="2.5" ry="2" fill="#7AB355"/>
+      <!-- 嘴 -->
+      <path id="pet-mouth" d="M28 43 Q32 46 36 43" stroke="#6B9E4E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- 触手 (6条) -->
+      <path d="M16 62 Q10 70 14 76" stroke="#8CC464" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M24 66 Q22 74 26 78" stroke="#8CC464" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M32 67 Q30 76 32 79" stroke="#8CC464" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M40 66 Q42 74 38 78" stroke="#8CC464" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M48 62 Q54 70 50 76" stroke="#8CC464" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>
   </div>
 
   <!-- 编辑器 -->

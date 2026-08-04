@@ -638,7 +638,7 @@
 
   // 检测移动端
   function detectMobile() {
-    isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
+    isMobile = window.innerWidth < 768;
     if (isMobile) {
       document.body.classList.add('disable-effects', 'disable-cursor');
     }
@@ -878,80 +878,92 @@
     if (isMobile) return;
     var pet = document.getElementById('pet');
     if (!pet) return;
-    var mouth = document.getElementById('pet-mouth');
     var speech = document.getElementById('pet-speech');
-    var pupilL = document.getElementById('pupil-l');
-    var pupilR = document.getElementById('pupil-r');
+    var pupilL = document.querySelector('.pet-pupil-l');
+    var pupilR = document.querySelector('.pet-pupil-r');
+    var mouth = document.getElementById('pet-mouth');
+    var petSvg = pet.querySelector('.pet-svg');
 
     // 眼睛跟随鼠标
     document.addEventListener('mousemove', function (e) {
-      var rect = pet.getBoundingClientRect();
-      var cx = rect.left + 26;
-      var cy = rect.top + 24;
+      if (!pupilL || !pupilR) return;
+      var rect = petSvg.getBoundingClientRect();
+      var cx = rect.left + 32;
+      var cy = rect.top + 30;
       var dx = e.clientX - cx;
       var dy = e.clientY - cy;
       var dist = Math.sqrt(dx * dx + dy * dy);
-      var maxD = 4;
-      var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * 0.12) : 0;
-      var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * 0.12) : 0;
-      if (pupilL) pupilL.style.transform = 'translate(calc(-50% + ' + mx + 'px), calc(-50% + ' + my + 'px))';
-      if (pupilR) pupilR.style.transform = 'translate(calc(-50% + ' + mx + 'px), calc(-50% + ' + my + 'px))';
+      var maxD = 3;
+      var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * 0.1) : 0;
+      var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * 0.1) : 0;
+      pupilL.setAttribute('cx', (27 + mx).toFixed(1));
+      pupilL.setAttribute('cy', (31 + my).toFixed(1));
+      pupilR.setAttribute('cx', (39 + mx).toFixed(1));
+      pupilR.setAttribute('cy', (31 + my).toFixed(1));
     });
 
-    // 点击交互 — 表情变化
+    // 拖拽
+    var dragging = false, dragOffX = 0, dragOffY = 0;
     pet.addEventListener('mousedown', function (e) {
       if (e.button !== 0) return;
-      petState.dragging = true;
+      dragging = true;
       var rect = pet.getBoundingClientRect();
-      petState.dragOffX = e.clientX - rect.left;
-      petState.dragOffY = e.clientY - rect.top;
+      dragOffX = e.clientX - rect.left;
+      dragOffY = e.clientY - rect.top;
       pet.classList.remove('pet-idle');
-      // 张嘴
-      if (mouth) mouth.classList.add('open');
+      pet.style.transition = 'none';
+      // 惊讶嘴
+      if (mouth) mouth.setAttribute('d', 'M28 43 Q32 49 36 43');
     });
 
     document.addEventListener('mousemove', function (e) {
-      if (!petState.dragging) return;
-      var newX = e.clientX - petState.dragOffX;
-      var newY = e.clientY - petState.dragOffY;
-      newX = Math.max(0, Math.min(window.innerWidth - 52, newX));
-      newY = Math.max(0, Math.min(window.innerHeight - 52, newY));
+      if (!dragging) return;
+      var newX = e.clientX - dragOffX;
+      var newY = e.clientY - dragOffY;
+      newX = Math.max(0, Math.min(window.innerWidth - 64, newX));
+      newY = Math.max(0, Math.min(window.innerHeight - 80, newY));
       pet.style.left = newX + 'px';
       pet.style.top = newY + 'px';
       pet.style.bottom = 'auto';
-      petState.petX = newX;
-      petState.petY = newY;
     });
 
-    document.addEventListener('mouseup', function (e) {
-      if (!petState.dragging) return;
-      petState.dragging = false;
-      // 恢复闭嘴
-      if (mouth) mouth.classList.remove('open');
+    document.addEventListener('mouseup', function () {
+      if (!dragging) return;
+      dragging = false;
+      pet.style.transition = '';
+      // 恢复微笑
+      if (mouth) mouth.setAttribute('d', 'M28 43 Q32 46 36 43');
       // 恢复空闲动画
-      setTimeout(function () { pet.classList.add('pet-idle'); }, 500);
+      setTimeout(function () { pet.classList.add('pet-idle'); }, 800);
     });
 
     // 双击说话
-    pet.addEventListener('dblclick', function () {
+    pet.addEventListener('dblclick', function (e) {
+      e.preventDefault();
       var phrases = [
         '今天也在认真记笔记呢！',
         '嵌入式开发加油 💪',
         '记得保存笔记哦～',
-        'HAL_GPIO_WritePin! ',
+        'HAL_GPIO_WritePin!',
         'FreeRTOS 真好用',
-        'STM32 启动！🚀',
+        'STM32 启动！',
         '代码写完了吗？',
         'Debug 辛苦了！',
         'I2C 又卡住了？',
-        '加油，你会越来越强的！'
+        '加油，你会越来越强的！',
+        '烧录成功了吗？',
+        '寄存器配置好了吗？',
+        '别忘了看数据手册～'
       ];
       var msg = phrases[Math.floor(Math.random() * phrases.length)];
       speech.textContent = msg;
       speech.classList.add('show');
+      // 惊讶表情
+      if (mouth) mouth.setAttribute('d', 'M27 42 Q32 50 37 42');
       clearTimeout(petState.speechTimer);
       petState.speechTimer = setTimeout(function () {
         speech.classList.remove('show');
+        if (mouth) mouth.setAttribute('d', 'M28 43 Q32 46 36 43');
       }, 2500);
     });
 
