@@ -281,37 +281,52 @@
     .header-center{margin:0 8px}
     .search-input{height:28px;font-size:12px}
   }
-  /* ==================== 密码门卫 ==================== */
-  .password-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#111122 0%,#0a0a14 100%);flex-direction:column;gap:24px;transition:opacity .5s,visibility .5s}
+  /* ==================== 密码门卫 — 银河深空 ==================== */
+  .password-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .6s,visibility .6s}
+  .password-gate::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% 40%,rgba(124,111,240,0.12) 0%,rgba(34,211,238,0.05) 30%,transparent 60%),radial-gradient(ellipse 80% 60% at 30% 70%,rgba(168,139,250,0.08) 0%,transparent 50%),radial-gradient(ellipse 60% 40% at 70% 30%,rgba(124,111,240,0.06) 0%,transparent 50%),#0a0a14;z-index:-1}
+  .password-gate::after{content:'';position:absolute;inset:0;background:radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,0.3),transparent),radial-gradient(2px 2px at 40% 70%,rgba(255,255,255,0.2),transparent),radial-gradient(1px 1px at 60% 20%,rgba(255,255,255,0.4),transparent),radial-gradient(1px 1px at 80% 60%,rgba(255,255,255,0.2),transparent),radial-gradient(1.5px 1.5px at 10% 80%,rgba(255,255,255,0.3),transparent),radial-gradient(1px 1px at 90% 40%,rgba(255,255,255,0.2),transparent),radial-gradient(2px 2px at 50% 50%,rgba(255,255,255,0.15),transparent),radial-gradient(1px 1px at 70% 80%,rgba(255,255,255,0.25),transparent),radial-gradient(1.5px 1.5px at 30% 10%,rgba(255,255,255,0.2),transparent),radial-gradient(1px 1px at 55% 90%,rgba(255,255,255,0.15),transparent);z-index:-1;pointer-events:none}
   .password-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
-  .password-gate-title{font-size:28px;font-weight:700;color:var(--text-primary);letter-spacing:2px}
-  .password-gate-title span{color:var(--accent)}
-  .password-gate-sub{font-size:13px;color:var(--text-muted);margin-top:-16px}
-  .password-gate-box{display:flex;gap:8px;align-items:center}
-  .password-gate input{width:220px;padding:10px 14px;border-radius:8px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);font-size:15px;outline:none;backdrop-filter:blur(12px);transition:border-color .2s,box-shadow .2s}
-  .password-gate input:focus{border-color:var(--accent);box-shadow:0 0 16px rgba(124,111,240,0.25)}
-  .password-gate input::placeholder{color:var(--text-muted)}
-  .password-gate button{padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,box-shadow .2s}
-  .password-gate button:hover{background:var(--accent-hover);box-shadow:0 0 20px rgba(124,111,240,0.35)}
-  .password-gate-error{font-size:13px;color:#ff6b6b;min-height:20px;text-align:center}
-  .password-gate-lock{font-size:48px;margin-bottom:-8px;opacity:.7}
+  .password-gate-card{display:flex;flex-direction:column;align-items:center;gap:20px;padding:48px 56px 40px;background:rgba(17,17,34,0.6);border:1px solid rgba(124,111,240,0.2);border-radius:20px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 60px rgba(124,111,240,0.1),0 0 120px rgba(124,111,240,0.05),inset 0 1px 0 rgba(255,255,255,0.05);position:relative;overflow:hidden}
+  .password-gate-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg at 50% 50%,transparent 0%,rgba(124,111,240,0.03) 25%,transparent 50%,rgba(34,211,238,0.02) 75%,transparent 100%);animation:gate-rotate 20s linear infinite;z-index:-1}
+  @keyframes gate-rotate{to{transform:rotate(360deg)}}
+  .password-gate-icon{font-size:40px;margin-bottom:4px;filter:drop-shadow(0 0 12px rgba(124,111,240,0.4))}
+  .password-gate-title{font-size:30px;font-weight:800;color:#e0e0f0;letter-spacing:3px;background:linear-gradient(135deg,#e0e0f0 0%,#a78bfa 50%,#7c6ff0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .password-gate-sub{font-size:13px;color:rgba(144,144,184,0.7);letter-spacing:1px;text-transform:uppercase;margin-top:-4px}
+  .password-gate-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(124,111,240,0.4),transparent)}
+  .password-gate-box{display:flex;gap:10px;align-items:center;margin-top:4px}
+  .password-gate input{width:240px;padding:12px 16px;border-radius:12px;border:1px solid rgba(124,111,240,0.2);background:rgba(10,10,20,0.6);color:#e0e0f0;font-size:15px;outline:none;backdrop-filter:blur(12px);transition:border-color .3s,box-shadow .3s;letter-spacing:2px}
+  .password-gate input:focus{border-color:rgba(124,111,240,0.5);box-shadow:0 0 24px rgba(124,111,240,0.15)}
+  .password-gate input::placeholder{color:rgba(96,96,128,0.5);letter-spacing:0;font-weight:300}
+  .password-gate button{padding:12px 24px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c6ff0,#6366f1);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(124,111,240,0.25)}
+  .password-gate button:hover{background:linear-gradient(135deg,#9b8ff5,#7c6ff0);box-shadow:0 6px 30px rgba(124,111,240,0.35);transform:translateY(-1px)}
+  .password-gate button:active{transform:translateY(0);box-shadow:0 2px 12px rgba(124,111,240,0.2)}
+  .password-gate-error{font-size:13px;color:#ff6b6b;min-height:20px;text-align:center;font-weight:400;text-shadow:0 0 12px rgba(255,107,107,0.2)}
+  .password-gate-footer{font-size:11px;color:rgba(96,96,128,0.4);letter-spacing:0.5px;margin-top:4px}
   @media(max-width:480px){
-    .password-gate-title{font-size:22px}
-    .password-gate-box{flex-direction:column}
+    .password-gate-card{padding:36px 28px 32px;border-radius:16px;margin:0 16px}
+    .password-gate-title{font-size:24px}
+    .password-gate-box{flex-direction:column;width:100%}
+    .password-gate input{width:100%}
+    .password-gate button{width:100%}
+    .password-gate-icon{font-size:32px}
   }
   </style>
 </head>
 <body>
-  <!-- 密码门卫 -->
+  <!-- 密码门卫 — 银河深空 -->
   <div class="password-gate" id="password-gate">
-    <div class="password-gate-lock">🔒</div>
-    <div class="password-gate-title">Nov.<span>.</span></div>
-    <div class="password-gate-sub">输入密码以访问知识库</div>
-    <div class="password-gate-box">
-      <input type="password" id="password-input" placeholder="请输入密码" autofocus>
-      <button id="password-btn">进入</button>
+    <div class="password-gate-card">
+      <div class="password-gate-icon">🌌</div>
+      <div class="password-gate-title">Nov.</div>
+      <div class="password-gate-sub">Knowledge Base</div>
+      <div class="password-gate-divider"></div>
+      <div class="password-gate-box">
+        <input type="password" id="password-input" placeholder="✦ 输入密码 ✦" autofocus>
+        <button id="password-btn">进入</button>
+      </div>
+      <div class="password-gate-error" id="password-error"></div>
+      <div class="password-gate-footer">Embedded Knowledge · Local First</div>
     </div>
-    <div class="password-gate-error" id="password-error"></div>
   </div>
   <!-- 深空特效 Canvas -->
   <canvas id="starfield-canvas"></canvas>
@@ -406,7 +421,7 @@
   <!-- 密码门卫 + 应用加载 -->
   <script>
   // 🔒 密码门卫 —— 修改此处密码即可
-  var GATE_PASSWORD = 'nov2024';
+  var GATE_PASSWORD = 'nov2026';
 
   (function() {
     var gate = document.getElementById('password-gate');
