@@ -882,24 +882,23 @@
     var pupilL = document.querySelector('.pet-pupil-l');
     var pupilR = document.querySelector('.pet-pupil-r');
     var mouth = document.getElementById('pet-mouth');
-    var petSvg = pet.querySelector('.pet-svg');
 
     // 眼睛跟随鼠标
     document.addEventListener('mousemove', function (e) {
       if (!pupilL || !pupilR) return;
-      var rect = petSvg.getBoundingClientRect();
-      var cx = rect.left + 32;
-      var cy = rect.top + 30;
+      var rect = pet.getBoundingClientRect();
+      var cx = rect.left + 96;
+      var cy = rect.top + 98;
       var dx = e.clientX - cx;
       var dy = e.clientY - cy;
       var dist = Math.sqrt(dx * dx + dy * dy);
-      var maxD = 3;
+      var maxD = 3.5;
       var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * 0.1) : 0;
       var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * 0.1) : 0;
-      pupilL.setAttribute('cx', (27 + mx).toFixed(1));
-      pupilL.setAttribute('cy', (31 + my).toFixed(1));
-      pupilR.setAttribute('cx', (39 + mx).toFixed(1));
-      pupilR.setAttribute('cy', (31 + my).toFixed(1));
+      pupilL.setAttribute('cx', (83 + mx).toFixed(1));
+      pupilL.setAttribute('cy', (99 + my).toFixed(1));
+      pupilR.setAttribute('cx', (111 + mx).toFixed(1));
+      pupilR.setAttribute('cy', (99 + my).toFixed(1));
     });
 
     // 拖拽
@@ -913,15 +912,15 @@
       pet.classList.remove('pet-idle');
       pet.style.transition = 'none';
       // 惊讶嘴
-      if (mouth) mouth.setAttribute('d', 'M28 43 Q32 49 36 43');
+      if (mouth) mouth.setAttribute('d', 'M90 107 Q96 115 102 107');
     });
 
     document.addEventListener('mousemove', function (e) {
       if (!dragging) return;
       var newX = e.clientX - dragOffX;
       var newY = e.clientY - dragOffY;
-      newX = Math.max(0, Math.min(window.innerWidth - 64, newX));
-      newY = Math.max(0, Math.min(window.innerHeight - 80, newY));
+      newX = Math.max(0, Math.min(window.innerWidth - 192, newX));
+      newY = Math.max(0, Math.min(window.innerHeight - 240, newY));
       pet.style.left = newX + 'px';
       pet.style.top = newY + 'px';
       pet.style.bottom = 'auto';
@@ -932,7 +931,7 @@
       dragging = false;
       pet.style.transition = '';
       // 恢复微笑
-      if (mouth) mouth.setAttribute('d', 'M28 43 Q32 46 36 43');
+      if (mouth) mouth.setAttribute('d', 'M91 108 Q96 113 101 108');
       // 恢复空闲动画
       setTimeout(function () { pet.classList.add('pet-idle'); }, 800);
     });
@@ -953,17 +952,19 @@
         '加油，你会越来越强的！',
         '烧录成功了吗？',
         '寄存器配置好了吗？',
-        '别忘了看数据手册～'
+        '别忘了看数据手册～',
+        'JTAG 连接上了吗？',
+        '中断向量表对齐了吗？'
       ];
       var msg = phrases[Math.floor(Math.random() * phrases.length)];
       speech.textContent = msg;
       speech.classList.add('show');
       // 惊讶表情
-      if (mouth) mouth.setAttribute('d', 'M27 42 Q32 50 37 42');
+      if (mouth) mouth.setAttribute('d', 'M90 107 Q96 116 102 107');
       clearTimeout(petState.speechTimer);
       petState.speechTimer = setTimeout(function () {
         speech.classList.remove('show');
-        if (mouth) mouth.setAttribute('d', 'M28 43 Q32 46 36 43');
+        if (mouth) mouth.setAttribute('d', 'M91 108 Q96 113 101 108');
       }, 2500);
     });
 
