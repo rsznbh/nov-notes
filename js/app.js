@@ -2265,8 +2265,41 @@
         if (e.key === 'Escape') { searchResults.classList.remove('active'); searchInput.blur(); }
       });
 
-      // 导入
-      document.getElementById('btn-import').addEventListener('click', function () { document.getElementById('md-file-input').click(); });
+      // 导出全部数据（JSON 备份）
+      document.getElementById('btn-export').addEventListener('click', async function () {
+        try {
+          var cats = await storage.getAllCategories();
+          var notes = await storage.getAllNotes();
+          var data = {
+            version: 1,
+            exportDate: new Date().toISOString(),
+            categories: cats,
+            notes: notes
+          };
+          var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'nov-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          alert('导出失败：' + err.message);
+        }
+      });
+
+      // 导入按钮：弹出选择，区分 MD 文件和 JSON 备份
+      document.getElementById('btn-import').addEventListener('click', function () {
+        if (confirm('导入 Markdown 文件？\n\n确定 → 选择 .md 文件导入为笔记\n取消 → 选择 .json 备份文件恢复')) {
+          document.getElementById('md-file-input').click();
+        } else {
+          document.getElementById('json-file-input').click();
+        }
+      });
+
+      // MD 文件导入
       document.getElementById('md-file-input').addEventListener('change', async function (e) {
         var files = Array.from(e.target.files);
         if (!files.length) return;
@@ -2285,6 +2318,78 @@
         document.getElementById('md-file-input').value = '';
         await renderSidebar(); navigateTo(null);
         alert('成功导入 ' + count + ' 篇笔记到「' + target.name + '」分类。');
+      });
+
+      // JSON 备份导入（恢复）
+      document.getElementById('json-file-input').addEventListener('change', async function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        try {
+          var txt = await file.text();
+          var data = JSON.parse(txt);
+          if (!data.categories || !data.notes) {
+            alert('无效的备份文件格式。');
+            document.getElementById('json-file-input').value = '';
+            return;
+          }
+          var mode = confirm('确定 → 合并导入（保留现有数据）\n取消 → 完全替换（清空现有数据后恢复）');
+          if (mode) {
+            // 合并模式：先恢复分类，再恢复笔记
+            for (var i = 0; i < data.categories.length; i++) {
+              var c = data.categories[i];
+              try {
+                await storage.addCategory(c.name, c.order, c.parentId);
+              } catch (_) {
+                // 分类名已存在，跳过
+              }
+            }
+            var allCats = await storage.getAllCategories();
+            var nameToId = {};
+            for (var j = 0; j < allCats.length; j++) nameToId[allCats[j].name] = allCats[j].id;
+            var count = 0;
+            for (var k = 0; k < data.notes.length; k++) {
+              var n = data.notes[k];
+              var newCatId = nameToId[n.name] || (allCats.length > 0 ? allCats[0].id : null);
+              await storage.addNote({ title: n.title, content: n.content, categoryId: newCatId, tags: n.tags || [] });
+              count++;
+            }
+            alert('合并完成：新增 ' + count + ' 篇笔记。');
+          } else {
+            // 替换模式：清空现有数据，再恢复
+            var existingCats = await storage.getAllCategories();
+            for (var i = 0; i < existingCats.length; i++) {
+              await storage.deleteCategory(existingCats[i].id);
+            }
+            // 重新创建分类（保持原始 ID 和顺序）
+            var idMap = {};
+            for (var j = 0; j < data.categories.length; j++) {
+              var c = data.categories[j];
+              var newId = await storage.addCategory(c.name, c.order, c.parentId);
+              idMap[c.id] = newId;
+            }
+            // 恢复笔记（用新分类 ID 映射）
+            var newCats = await storage.getAllCategories();
+            var oldIdToNewCatId = {};
+            for (var k = 0; k < newCats.length; k++) {
+              var nc = newCats[k];
+              var oldCat = data.categories.find(function (dc) { return dc.name === nc.name; });
+              if (oldCat) oldIdToNewCatId[oldCat.id] = nc.id;
+            }
+            var count = 0;
+            for (var n = 0; n < data.notes.length; n++) {
+              var note = data.notes[n];
+              var catId = oldIdToNewCatId[note.categoryId] || (newCats.length > 0 ? newCats[0].id : null);
+              await storage.addNote({ title: note.title, content: note.content, categoryId: catId, tags: note.tags || [] });
+              count++;
+            }
+            alert('替换完成：恢复 ' + count + ' 篇笔记。');
+          }
+          var all = await storage.getAllNotes(); rebuildSearchIndex(all);
+          await renderSidebar(); navigateTo(null);
+        } catch (err) {
+          alert('导入失败：' + err.message);
+        }
+        document.getElementById('json-file-input').value = '';
       });
 
       // 首页

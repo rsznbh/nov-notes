@@ -409,7 +409,12 @@
       </div>
       <div class="header-right">
         <span class="mode-badge" id="mode-badge">📝 编辑模式</span>
-        <button class="header-btn" id="btn-import" title="导入 Markdown 文件">
+        <button class="header-btn" id="btn-export" title="导出全部数据（JSON 备份）">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </button>
+        <button class="header-btn" id="btn-import" title="导入 Markdown 或 JSON 备份">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
@@ -528,8 +533,9 @@
     </div>
   </div>
 
-  <!-- MD 文件导入 -->
+  <!-- MD 文件导入 / JSON 备份 -->
   <input type="file" id="md-file-input" accept=".md,.markdown,.txt" multiple style="display:none">
+  <input type="file" id="json-file-input" accept=".json" style="display:none">
 
   <!-- 主脚本 -->
   <!-- 密码门卫 + 应用加载 -->
