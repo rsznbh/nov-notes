@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nov. | UnKnown</title>
+  <title>Nov. | Note</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📓</text></svg>">
   <style>
   /* ==================== CSS 变量 — 深空科幻主题 ==================== */
@@ -366,8 +366,8 @@
   </style>
 </head>
 <body>
-  <!-- 密码门卫 — 银河深空 -->
-  <div class="password-gate" id="password-gate">
+  <!-- 密码门卫 — 银河深空（已关闭，保留代码） -->
+  <div class="password-gate" id="password-gate" style="display:none">
     <div class="password-gate-card">
       <div class="password-gate-icon">🌌</div>
       <div class="password-gate-title">NOV. NOTE</div>
@@ -434,7 +434,7 @@
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-resize-handle" id="sidebar-resize-handle"></div>
         <div class="sidebar-header">
-          <span class="sidebar-title">笔记目录</span>
+          <span class="sidebar-title">目录</span>
           <div class="sidebar-actions">
             <button class="sidebar-add-btn" id="btn-add-category" title="新增分类">+</button>
             <button class="sidebar-add-btn" id="btn-add-note" title="新建笔记">📄</button>
@@ -541,8 +541,9 @@
   <!-- 主脚本 -->
   <!-- 密码门卫 + 应用加载 -->
   <script>
-  // 🔒 密码门卫 —— 修改此处密码即可
+  // 🔒 密码门卫 —— 修改此处密码即可（当前已关闭，保留代码以便重新启用）
   var GATE_PASSWORD = '2026';
+  var GATE_ENABLED = false; // 设为 true 重新启用密码登录
 
   (function() {
     var gate = document.getElementById('password-gate');
@@ -571,9 +572,16 @@
 
     btn.addEventListener('click', tryUnlock);
     input.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryUnlock(); });
-    input.focus();
+
+    // 密码门已关闭：自动加载 app.js
+    if (!GATE_ENABLED) {
+      var script = document.createElement('script');
+      script.src = 'js/app.js';
+      document.body.appendChild(script);
+    } else {
+      input.focus();
+    }
   })();
   </script>
-  <!-- 不再直接加载 app.js，由密码门卫控制 -->
 </body>
 </html>
