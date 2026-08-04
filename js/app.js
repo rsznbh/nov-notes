@@ -870,9 +870,9 @@
     particleCanvas = { canvas: canvas, ctx: ctx, resize: resize };
   }
 
-  // ==================== 桌宠 ====================
+  // ==================== 桌宠 — 像素小螃蟹 ====================
 
-  var petState = { idle: true, dragging: false, dragOffX: 0, dragOffY: 0, petX: 0, petY: 0, speechTimer: null };
+  var petState = { idle: true, dragging: false, dragOffX: 0, dragOffY: 0, petX: 0, petY: 0, speechTimer: null, mood: 'happy', menuOpen: false, bubbleTimer: null, walkDir: 1 };
 
   function initPet() {
     if (isMobile) return;
@@ -882,23 +882,24 @@
     var pupilL = document.querySelector('.pet-pupil-l');
     var pupilR = document.querySelector('.pet-pupil-r');
     var mouth = document.getElementById('pet-mouth');
+    var bubble = document.getElementById('bubble');
 
     // 眼睛跟随鼠标
     document.addEventListener('mousemove', function (e) {
       if (!pupilL || !pupilR) return;
       var rect = pet.getBoundingClientRect();
-      var cx = rect.left + 96;
-      var cy = rect.top + 98;
+      var cx = rect.left + 99;
+      var cy = rect.top + 59;
       var dx = e.clientX - cx;
       var dy = e.clientY - cy;
       var dist = Math.sqrt(dx * dx + dy * dy);
       var maxD = 3.5;
-      var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * 0.1) : 0;
-      var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * 0.1) : 0;
-      pupilL.setAttribute('cx', (83 + mx).toFixed(1));
-      pupilL.setAttribute('cy', (99 + my).toFixed(1));
-      pupilR.setAttribute('cx', (111 + mx).toFixed(1));
-      pupilR.setAttribute('cy', (99 + my).toFixed(1));
+      var mx = dist > 0 ? (dx / dist) * Math.min(maxD, dist * 0.08) : 0;
+      var my = dist > 0 ? (dy / dist) * Math.min(maxD, dist * 0.08) : 0;
+      pupilL.setAttribute('cx', (52 + mx).toFixed(1));
+      pupilL.setAttribute('cy', (39 + my).toFixed(1));
+      pupilR.setAttribute('cx', (79 + mx).toFixed(1));
+      pupilR.setAttribute('cy', (39 + my).toFixed(1));
     });
 
     // 拖拽
@@ -911,16 +912,21 @@
       dragOffY = e.clientY - rect.top;
       pet.classList.remove('pet-idle');
       pet.style.transition = 'none';
-      // 惊讶嘴
-      if (mouth) mouth.setAttribute('d', 'M90 107 Q96 115 102 107');
+      // 钳子举起动画
+      var clawL = pet.querySelector('.claw-left');
+      var clawR = pet.querySelector('.claw-right');
+      if (clawL) clawL.style.animation = 'none';
+      if (clawR) clawR.style.animation = 'none';
+      // 张大嘴
+      if (mouth) mouth.setAttribute('d', 'M61 58 Q66 66 71 58');
     });
 
     document.addEventListener('mousemove', function (e) {
       if (!dragging) return;
       var newX = e.clientX - dragOffX;
       var newY = e.clientY - dragOffY;
-      newX = Math.max(0, Math.min(window.innerWidth - 192, newX));
-      newY = Math.max(0, Math.min(window.innerHeight - 240, newY));
+      newX = Math.max(0, Math.min(window.innerWidth - 132, newX));
+      newY = Math.max(0, Math.min(window.innerHeight - 114, newY));
       pet.style.left = newX + 'px';
       pet.style.top = newY + 'px';
       pet.style.bottom = 'auto';
@@ -931,10 +937,124 @@
       dragging = false;
       pet.style.transition = '';
       // 恢复微笑
-      if (mouth) mouth.setAttribute('d', 'M91 108 Q96 113 101 108');
+      if (mouth) mouth.setAttribute('d', 'M61 60 Q66 64 71 60');
+      // 恢复钳子动画
+      var clawL = pet.querySelector('.claw-left');
+      var clawR = pet.querySelector('.claw-right');
+      if (clawL) clawL.style.animation = '';
+      if (clawR) clawR.style.animation = '';
       // 恢复空闲动画
       setTimeout(function () { pet.classList.add('pet-idle'); }, 800);
     });
+
+    // 右键菜单
+    var menu = null;
+    pet.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeMenu();
+      menu = document.createElement('div');
+      menu.id = 'pet-menu';
+      var moodLabel = { happy: '开心', sleepy: '困了', hungry: '饿了', curious: '好奇', busy: '忙碌' }[petState.mood];
+      menu.innerHTML = '<div style="background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;padding:4px;font-size:12px;color:var(--text-primary);box-shadow:0 4px 16px rgba(0,0,0,0.2);min-width:120px">' +
+        '<div class="pet-menu-item" data-action="feed">🦐 喂食小鱼</div>' +
+        '<div class="pet-menu-item" data-action="skin">🎨 换皮肤</div>' +
+        '<div class="pet-menu-item" data-action="sleep">💤 休眠</div>' +
+        '<div class="pet-menu-item" data-action="exit">❌ 退出</div>' +
+        '<div style="border-top:1px solid var(--border-color);margin:4px 0;padding:4px 8px 2px;font-size:10px;color:var(--text-muted)">情绪: ' + moodLabel + '</div>' +
+        '</div>';
+      var mx = e.clientX, my = e.clientY;
+      menu.style.position = 'fixed';
+      menu.style.left = mx + 'px';
+      menu.style.top = my + 'px';
+      menu.style.zIndex = '9999';
+      document.body.appendChild(menu);
+      petState.menuOpen = true;
+
+      // 菜单项点击
+      menu.querySelectorAll('.pet-menu-item').forEach(function (item) {
+        item.style.padding = '6px 10px';
+        item.style.borderRadius = '4px';
+        item.style.cursor = 'pointer';
+        item.addEventListener('mouseenter', function () { item.style.background = 'var(--bg-hover)'; });
+        item.addEventListener('mouseleave', function () { item.style.background = ''; });
+        item.addEventListener('click', function (action) {
+          var act = item.dataset.action;
+          if (act === 'feed') {
+            petState.mood = 'happy';
+            showSpeech('好吃！🦐');
+            showBubble();
+          } else if (act === 'skin') {
+            cycleSkin();
+            showSpeech('新衣服！✨');
+          } else if (act === 'sleep') {
+            petState.mood = 'sleepy';
+            showSpeech('Zzz... 💤');
+            pet.classList.add('pet-sleeping');
+            setTimeout(function () { pet.classList.remove('pet-sleeping'); showSpeech('醒了！'); }, 3000);
+          } else if (act === 'exit') {
+            pet.style.display = 'none';
+          }
+          closeMenu();
+        });
+      });
+    });
+
+    function closeMenu() {
+      if (menu && menu.parentNode) {
+        menu.parentNode.removeChild(menu);
+        menu = null;
+      }
+      petState.menuOpen = false;
+    }
+    document.addEventListener('click', closeMenu);
+
+    // 换皮肤
+    var skins = [
+      { shell: '#8BB8E8', shellLight: '#A5CFF0', name: '浅蓝' },
+      { shell: '#F5D5D0', shellLight: '#FAE8E8', name: '珊瑚' },
+      { shell: '#D4B8F0', shellLight: '#E8D0FA', name: '淡紫' },
+      { shell: '#F5E6C8', shellLight: '#FAF0E0', name: '奶油' },
+      { shell: '#B8E8D4', shellLight: '#D0FAE8', name: '薄荷' },
+    ];
+    var currentSkin = 0;
+    function cycleSkin() {
+      currentSkin = (currentSkin + 1) % skins.length;
+      var s = skins[currentSkin];
+      // 更新壳颜色
+      var rects = pet.querySelectorAll('rect');
+      rects.forEach(function (r) {
+        if (r.getAttribute('fill') === '#8BB8E8') r.setAttribute('fill', s.shell);
+        if (r.getAttribute('fill') === '#A5CFF0') r.setAttribute('fill', s.shellLight);
+      });
+      var circles = pet.querySelectorAll('circle');
+      circles.forEach(function (c) {
+        if (c.getAttribute('fill') === '#8BB8E8') c.setAttribute('fill', s.shell);
+        if (c.getAttribute('fill') === '#A5CFF0') c.setAttribute('fill', s.shellLight);
+      });
+    }
+
+    // 吐泡泡
+    function showBubble() {
+      if (bubble) {
+        bubble.style.opacity = '0.7';
+        bubble.classList.add('bubble');
+        setTimeout(function () {
+          bubble.classList.remove('bubble');
+          bubble.style.opacity = '0';
+        }, 3000);
+      }
+    }
+
+    // 说话
+    function showSpeech(msg) {
+      speech.textContent = msg;
+      speech.classList.add('show');
+      clearTimeout(petState.speechTimer);
+      petState.speechTimer = setTimeout(function () {
+        speech.classList.remove('show');
+      }, 2500);
+    }
 
     // 双击说话
     pet.addEventListener('dblclick', function (e) {
@@ -949,7 +1069,6 @@
         '代码写完了吗？',
         'Debug 辛苦了！',
         'I2C 又卡住了？',
-        '加油，你会越来越强的！',
         '烧录成功了吗？',
         '寄存器配置好了吗？',
         '别忘了看数据手册～',
@@ -957,16 +1076,22 @@
         '中断向量表对齐了吗？'
       ];
       var msg = phrases[Math.floor(Math.random() * phrases.length)];
-      speech.textContent = msg;
-      speech.classList.add('show');
-      // 惊讶表情
-      if (mouth) mouth.setAttribute('d', 'M90 107 Q96 116 102 107');
-      clearTimeout(petState.speechTimer);
-      petState.speechTimer = setTimeout(function () {
-        speech.classList.remove('show');
-        if (mouth) mouth.setAttribute('d', 'M91 108 Q96 113 101 108');
-      }, 2500);
+      showSpeech(msg);
+      if (mouth) mouth.setAttribute('d', 'M61 58 Q66 66 71 58');
+      setTimeout(function () { if (mouth) mouth.setAttribute('d', 'M61 60 Q66 64 71 60'); }, 2500);
     });
+
+    // 随机小事件 — 吐泡泡 / 发现小鱼 / 捡到零件
+    petState.bubbleTimer = setInterval(function () {
+      if (petState.dragging || petState.menuOpen) return;
+      var rand = Math.random();
+      if (rand < 0.3) {
+        showBubble();
+      } else if (rand < 0.5) {
+        var events = ['发现了小鱼 🐟', '捡到电子零件 🔩', '打了个哈欠 ', '伸个懒腰～', '看看谁在写代码 👀'];
+        showSpeech(events[Math.floor(Math.random() * events.length)]);
+      }
+    }, 8000);
 
     // 初始位置左下角
     pet.classList.add('pet-idle');
