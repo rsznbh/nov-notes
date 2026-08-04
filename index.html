@@ -281,9 +281,38 @@
     .header-center{margin:0 8px}
     .search-input{height:28px;font-size:12px}
   }
+  /* ==================== 密码门卫 ==================== */
+  .password-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#111122 0%,#0a0a14 100%);flex-direction:column;gap:24px;transition:opacity .5s,visibility .5s}
+  .password-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .password-gate-title{font-size:28px;font-weight:700;color:var(--text-primary);letter-spacing:2px}
+  .password-gate-title span{color:var(--accent)}
+  .password-gate-sub{font-size:13px;color:var(--text-muted);margin-top:-16px}
+  .password-gate-box{display:flex;gap:8px;align-items:center}
+  .password-gate input{width:220px;padding:10px 14px;border-radius:8px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);font-size:15px;outline:none;backdrop-filter:blur(12px);transition:border-color .2s,box-shadow .2s}
+  .password-gate input:focus{border-color:var(--accent);box-shadow:0 0 16px rgba(124,111,240,0.25)}
+  .password-gate input::placeholder{color:var(--text-muted)}
+  .password-gate button{padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,box-shadow .2s}
+  .password-gate button:hover{background:var(--accent-hover);box-shadow:0 0 20px rgba(124,111,240,0.35)}
+  .password-gate-error{font-size:13px;color:#ff6b6b;min-height:20px;text-align:center}
+  .password-gate-lock{font-size:48px;margin-bottom:-8px;opacity:.7}
+  @media(max-width:480px){
+    .password-gate-title{font-size:22px}
+    .password-gate-box{flex-direction:column}
+  }
   </style>
 </head>
 <body>
+  <!-- 密码门卫 -->
+  <div class="password-gate" id="password-gate">
+    <div class="password-gate-lock">🔒</div>
+    <div class="password-gate-title">Nov.<span>.</span></div>
+    <div class="password-gate-sub">输入密码以访问知识库</div>
+    <div class="password-gate-box">
+      <input type="password" id="password-input" placeholder="请输入密码" autofocus>
+      <button id="password-btn">进入</button>
+    </div>
+    <div class="password-gate-error" id="password-error"></div>
+  </div>
   <!-- 深空特效 Canvas -->
   <canvas id="starfield-canvas"></canvas>
   <canvas id="particle-canvas"></canvas>
@@ -374,6 +403,41 @@
   <input type="file" id="md-file-input" accept=".md,.markdown,.txt" multiple style="display:none">
 
   <!-- 主脚本 -->
-  <script src="js/app.js"></script>
+  <!-- 密码门卫 + 应用加载 -->
+  <script>
+  // 🔒 密码门卫 —— 修改此处密码即可
+  var GATE_PASSWORD = 'nov2024';
+
+  (function() {
+    var gate = document.getElementById('password-gate');
+    var input = document.getElementById('password-input');
+    var btn = document.getElementById('password-btn');
+    var err = document.getElementById('password-error');
+    var attempts = 0;
+
+    function tryUnlock() {
+      if (input.value === GATE_PASSWORD) {
+        gate.classList.add('hidden');
+        err.textContent = '';
+        // 密码正确，加载 app.js
+        var script = document.createElement('script');
+        script.src = 'js/app.js';
+        document.body.appendChild(script);
+      } else {
+        attempts++;
+        err.textContent = '密码错误' + (attempts >= 3 ? '，再想想？' : '');
+        input.value = '';
+        input.focus();
+        input.style.borderColor = '#ff6b6b';
+        setTimeout(function() { input.style.borderColor = ''; }, 600);
+      }
+    }
+
+    btn.addEventListener('click', tryUnlock);
+    input.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryUnlock(); });
+    input.focus();
+  })();
+  </script>
+  <!-- 不再直接加载 app.js，由密码门卫控制 -->
 </body>
 </html>
