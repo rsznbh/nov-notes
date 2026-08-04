@@ -1325,10 +1325,7 @@
 
     mc.innerHTML = '<div class="note-view">' +
       '<div class="note-header">' +
-      '<div style="display:flex;align-items:center;gap:12px">' +
-      '<button class="note-action-btn btn-back"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</button>' +
-      '<h1 class="note-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0">' + escHtml(note.title) + '</h1>' +
-      '</div>' +
+      '<h1 class="note-title">' + escHtml(note.title) + '</h1>' +
       '<div class="note-actions">' +
       '<button class="note-action-btn btn-edit"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>编辑</button>' +
       '<button class="note-action-btn btn-rename"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>重命名</button>' +
@@ -1338,7 +1335,6 @@
       (note.tags && note.tags.length ? '  |  🏷 ' + escHtml(note.tags.join(', ')) : '') +
       '</div><div class="md-content">' + renderMarkdown(note.content) + '</div></div>';
 
-    mc.querySelector('.btn-back').addEventListener('click', function () { navigateTo(activeCatId); });
     mc.querySelector('.btn-edit').addEventListener('click', function () { openEditor(note); });
     mc.querySelector('.btn-rename').addEventListener('click', async function () {
       var name = prompt('输入新标题：', note.title);
