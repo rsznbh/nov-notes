@@ -283,38 +283,32 @@
     .search-input{height:28px;font-size:12px}
   }
   /* ==================== 密码门卫 — 银河深空（优化版） ==================== */
-  .password-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .6s,visibility .6s;background:#0c0c0c}
-  .password-gate::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,65,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,65,0.03) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+  .password-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .6s,visibility .6s;background:linear-gradient(135deg,#f6d365 0%,#fda085 30%,#f093fb 60%,#89CFF0 100%)}
+  .password-gate::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,0.5) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,0.3) 0%,transparent 40%);pointer-events:none}
   .password-gate::after{display:none}
   .password-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
   .password-gate-card{display:flex;flex-direction:column;align-items:center;gap:16px;padding:0;background:transparent;border:none;box-shadow:none;position:relative}
   .password-gate-card::before{display:none}
   .password-gate-card::after{display:none}
   .password-gate-icon{display:none}
-  .password-gate-title{font-size:28px;font-weight:700;color:#00ff41;letter-spacing:2px;font-family:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,monospace;margin-bottom:-4px}
-  .password-gate-title::before{content:'$ ';color:#4a4a4a}
-  .password-gate-sub{font-size:11px;color:#4a4a4a;letter-spacing:1.5px;font-family:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,monospace;margin-top:0;font-weight:400;margin-bottom:8px}
-  .password-gate-sub::before{content:'// '}
-  .password-gate-divider{display:none}
-  .password-gate-box{display:flex;gap:8px;align-items:center;margin-top:0}
-  .password-gate input{width:220px;padding:10px 14px;border-radius:4px;border:1px solid #333;background:#111;color:#00ff41;font-size:14px;font-family:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,monospace;outline:none;transition:border-color .2s;letter-spacing:1px}
-  .password-gate input:hover{border-color:#00ff41}
-  .password-gate input:focus{border-color:#00ff41;box-shadow:0 0 0 1px rgba(0,255,65,0.15)}
-  .password-gate input::placeholder{color:#333;letter-spacing:1px}
-  .password-gate input:focus::placeholder{color:#222}
-  .password-gate button{padding:10px 22px;border-radius:4px;border:1px solid #00ff41;background:transparent;color:#00ff41;font-size:14px;font-family:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,monospace;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:1px;text-transform:uppercase}
-  .password-gate button:hover{background:#00ff41;color:#0c0c0c}
-  .password-gate button:active{transform:scale(0.98)}
+  .password-gate-title{font-size:32px;font-weight:800;color:#fff;letter-spacing:3px;text-shadow:0 2px 16px rgba(0,0,0,0.15);margin-bottom:-4px}
+  .password-gate-sub{font-size:13px;color:rgba(255,255,255,0.8);letter-spacing:2px;margin-top:0;font-weight:400;margin-bottom:8px}
+  .password-gate-divider{width:40px;height:2px;background:rgba(255,255,255,0.4);border-radius:1px;margin:0 0 20px 0}
+  .password-gate-box{display:flex;gap:10px;align-items:center;margin-top:0}
+  .password-gate input{width:240px;padding:12px 16px;border-radius:14px;border:2px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.25);color:#fff;font-size:15px;outline:none;transition:all .3s;letter-spacing:1px;font-weight:500}
+  .password-gate input:hover{border-color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.3)}
+  .password-gate input:focus{border-color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+  .password-gate input::placeholder{color:rgba(255,255,255,0.6);font-weight:300}
+  .password-gate input:focus::placeholder{color:rgba(255,255,255,0.3)}
+  .password-gate button{padding:12px 28px;border-radius:14px;border:none;background:rgba(255,255,255,0.9);color:#f093fb;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.1);letter-spacing:0.5px}
+  .password-gate button:hover{background:#fff;box-shadow:0 6px 28px rgba(0,0,0,0.15);transform:translateY(-2px)}
+  .password-gate button:active{transform:translateY(0)}
   .password-gate button::after{display:none}
-  .password-gate-error{font-size:12px;color:#ff3333;min-height:18px;text-align:center;font-family:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,monospace;letter-spacing:0.5px;margin-top:4px}
-  .password-gate-error::before{content:'ERROR: '}
-  .password-gate-footer{font-size:10px;color:#333;letter-spacing:0.5px;margin-top:20px;font-family:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,monospace;font-weight:400}
-  .password-gate-footer::before{content:'> '}
-  .password-gate-footer::after{content:' ▋';animation:blink 1s step-end infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .password-gate-error{font-size:13px;color:#fff;min-height:18px;text-align:center;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,0.2);margin-top:4px}
+  .password-gate-footer{font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.5px;margin-top:24px;font-weight:400}
   @media(max-width:480px){
     .password-gate-card{padding:0 16px;margin:0 16px}
-    .password-gate-title{font-size:22px}
+    .password-gate-title{font-size:26px}
     .password-gate-box{flex-direction:column;width:100%}
     .password-gate input{width:100%}
     .password-gate button{width:100%}
