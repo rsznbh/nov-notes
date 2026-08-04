@@ -8,49 +8,49 @@
   <style>
   /* ==================== CSS 变量 — 深空科幻主题 ==================== */
   :root, [data-theme="dark"] {
-    --bg-primary: #0a0a14;
-    --bg-secondary: #111122;
-    --bg-tertiary: #1a1a2e;
-    --bg-hover: #25253e;
-    --border-color: #2a2a4a;
-    --text-primary: #e0e0f0;
-    --text-secondary: #9090b8;
-    --text-muted: #606080;
-    --accent: #7c6ff0;
-    --accent-hover: #9b8ff5;
-    --accent-bg: rgba(124,111,240,0.12);
-    --code-bg: #0e0e1e;
-    --code-border: #2a2a4a;
-    --scrollbar-thumb: #2a2a4a;
-    --shadow: 0 4px 24px rgba(0,0,0,0.6);
-    --glass-bg: rgba(17,17,34,0.75);
-    --glass-border: rgba(124,111,240,0.15);
-    --glass-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    --glow-accent: 0 0 20px rgba(124,111,240,0.25);
-    --kw: #c084fc; --cmt: #6b7280; --str: #7dd3fc;
+    --bg-primary: #16162a;
+    --bg-secondary: #1e1e36;
+    --bg-tertiary: #262642;
+    --bg-hover: #32324e;
+    --border-color: #36365a;
+    --text-primary: #eaeaf5;
+    --text-secondary: #a8a8c4;
+    --text-muted: #7a7a98;
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --accent-bg: rgba(129,140,248,0.1);
+    --code-bg: #12122a;
+    --code-border: #36365a;
+    --scrollbar-thumb: #36365a;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --glass-bg: rgba(30,30,54,0.7);
+    --glass-border: rgba(129,140,248,0.12);
+    --glass-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    --glow-accent: 0 0 20px rgba(129,140,248,0.15);
+    --kw: #c4b5fd; --cmt: #7a7a98; --str: #7dd3fc;
     --num: #22d3ee; --preproc: #a78bfa; --reg: #ffa657; --var: #7ee787;
   }
   [data-theme="light"] {
-    --bg-primary: #f5f5fa;
-    --bg-secondary: #eeeef5;
-    --bg-tertiary: #e2e2ec;
-    --bg-hover: #d0d0e0;
-    --border-color: #c8c8d8;
-    --text-primary: #1f1f2e;
-    --text-secondary: #6e6e88;
-    --text-muted: #9898b0;
-    --accent: #6c5ce7;
-    --accent-hover: #5a4bd1;
-    --accent-bg: rgba(108,92,231,0.08);
-    --code-bg: #f0f0f8;
-    --code-border: #d0d0e0;
-    --scrollbar-thumb: #c0c0d0;
-    --shadow: 0 2px 8px rgba(0,0,0,0.08);
-    --glass-bg: rgba(245,245,250,0.85);
-    --glass-border: rgba(108,92,231,0.12);
-    --glass-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    --glow-accent: 0 0 12px rgba(108,92,231,0.15);
-    --kw: #cf222e; --cmt: #6e6e88; --str: #0a3069;
+    --bg-primary: #fafaff;
+    --bg-secondary: #f0f0f8;
+    --bg-tertiary: #e8e8f2;
+    --bg-hover: #d8d8e8;
+    --border-color: #d0d0e0;
+    --text-primary: #1a1a2e;
+    --text-secondary: #5a5a78;
+    --text-muted: #8a8aa0;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-bg: rgba(99,102,241,0.08);
+    --code-bg: #f2f2f8;
+    --code-border: #d8d8e8;
+    --scrollbar-thumb: #c8c8d8;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --glass-bg: rgba(250,250,255,0.85);
+    --glass-border: rgba(99,102,241,0.1);
+    --glass-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    --glow-accent: 0 0 12px rgba(99,102,241,0.12);
+    --kw: #d14; --cmt: #5a5a78; --str: #0a3069;
     --num: #0550ae; --preproc: #8250df; --reg: #953800; --var: #116329;
   }
 
@@ -209,7 +209,7 @@
   .md-table tr:nth-child(even){background:var(--bg-secondary)}
 
   /* ==================== 编辑器 ==================== */
-  .editor-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,20,0.92);z-index:300;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:48px 24px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+  .editor-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(22,22,42,0.92);z-index:300;display:none;justify-content:center;overflow-y:auto;padding:48px 24px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
   .editor-overlay.active{display:flex}
   .editor-wrapper{width:100%;max-width:800px;display:flex;flex-direction:column;background:var(--bg-primary);border:1px solid var(--glass-border);border-radius:12px;box-shadow:var(--glass-shadow);overflow:hidden}
   .editor-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--glass-bg);border-bottom:1px solid var(--glass-border);min-height:48px;flex-wrap:wrap;gap:6px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -220,8 +220,9 @@
   .editor-btn.primary:hover{background:var(--accent-hover)}
   .editor-btn:hover{background:var(--bg-hover)}
   .editor-category-select{padding:4px 8px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:4px;color:var(--text-primary);font-size:13px;outline:none}
-  .editor-body{flex:1;overflow:hidden}
+  .editor-body{flex:1;overflow:hidden;min-height:400px;max-height:calc(100vh - 120px)}
   .editor-textarea{width:100%;height:100%;padding:16px;background:var(--bg-primary);color:var(--text-primary);border:none;resize:none;font-family:"JetBrains Mono","Fira Code",Consolas,monospace;font-size:13px;line-height:1.6;outline:none;overflow-y:auto;tab-size:4}
+  .note-action-btn.btn-back{background:none;border-color:transparent;color:var(--text-secondary)}
 
   /* ==================== 模态框 ==================== */
   .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:400}
@@ -285,110 +286,43 @@
   /* ==================== 密码门卫 — 银河深空（优化版） ==================== */
   .password-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .6s,visibility .6s}
   .password-gate::before{content:'';position:absolute;inset:0;z-index:-1;background:
-    /* 银河雾带状光晕 — 主星云 */
-    radial-gradient(ellipse 140% 70% at 50% 30%,rgba(120,140,255,0.10) 0%,transparent 50%),
-    radial-gradient(ellipse 100% 60% at 30% 60%,rgba(168,139,250,0.09) 0%,transparent 45%),
-    radial-gradient(ellipse 90% 50% at 70% 50%,rgba(100,180,255,0.07) 0%,transparent 45%),
-    /* 底部星云 */
-    radial-gradient(ellipse 120% 40% at 50% 90%,rgba(124,111,240,0.06) 0%,transparent 50%),
-    /* 环境光 */
-    radial-gradient(ellipse 80% 40% at 20% 20%,rgba(160,140,255,0.05) 0%,transparent 50%),
-    radial-gradient(ellipse 60% 60% at 80% 80%,rgba(80,160,255,0.04) 0%,transparent 50%),
-    /* 基色提亮 */
-    #0d0d1e}
+    /* 明亮天空渐变 */
+    linear-gradient(180deg, #d4e5f7 0%, #e8d5f5 35%, #f0e6ff 60%, #faf5ff 100%)}
   .password-gate::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:
-    /* 近景亮星 — 大而亮 */
-    radial-gradient(2.5px 2.5px at 15% 22%,rgba(255,255,255,0.5),transparent),
-    radial-gradient(2px 2px at 35% 12%,rgba(255,255,255,0.4),transparent),
-    radial-gradient(3px 3px at 55% 28%,rgba(255,255,255,0.35),transparent),
-    radial-gradient(2px 2px at 78% 15%,rgba(255,255,255,0.45),transparent),
-    radial-gradient(2.5px 2.5px at 92% 35%,rgba(255,255,255,0.3),transparent),
-    radial-gradient(2px 2px at 8% 55%,rgba(255,255,255,0.35),transparent),
-    radial-gradient(3px 3px at 65% 70%,rgba(255,255,255,0.25),transparent),
-    radial-gradient(2px 2px at 85% 80%,rgba(255,255,255,0.3),transparent),
-    radial-gradient(2.5px 2.5px at 25% 85%,rgba(255,255,255,0.35),transparent),
-    radial-gradient(2px 2px at 42% 44%,rgba(255,255,255,0.3),transparent),
-    radial-gradient(2.5px 2.5px at 72% 52%,rgba(255,255,255,0.25),transparent),
-    radial-gradient(2px 2px at 3% 15%,rgba(255,255,255,0.35),transparent),
-    /* 中景星 — 中等亮度 */
-    radial-gradient(1.5px 1.5px at 20% 8%,rgba(200,210,255,0.3),transparent),
-    radial-gradient(1.2px 1.2px at 45% 18%,rgba(200,210,255,0.25),transparent),
-    radial-gradient(1.5px 1.5px at 60% 5%,rgba(200,210,255,0.2),transparent),
-    radial-gradient(1.2px 1.2px at 72% 40%,rgba(180,200,255,0.25),transparent),
-    radial-gradient(1.5px 1.5px at 40% 50%,rgba(180,200,255,0.2),transparent),
-    radial-gradient(1.2px 1.2px at 88% 55%,rgba(180,200,255,0.3),transparent),
-    radial-gradient(1.5px 1.5px at 12% 72%,rgba(200,210,255,0.2),transparent),
-    radial-gradient(1.2px 1.2px at 50% 78%,rgba(200,210,255,0.25),transparent),
-    radial-gradient(1.5px 1.5px at 75% 90%,rgba(200,210,255,0.2),transparent),
-    radial-gradient(1.2px 1.2px at 5% 40%,rgba(180,200,255,0.25),transparent),
-    radial-gradient(1.5px 1.5px at 30% 48%,rgba(180,200,255,0.2),transparent),
-    radial-gradient(1.2px 1.2px at 62% 62%,rgba(180,200,255,0.22),transparent),
-    radial-gradient(1.5px 1.5px at 48% 32%,rgba(200,210,255,0.2),transparent),
-    radial-gradient(1.2px 1.2px at 80% 10%,rgba(180,200,255,0.25),transparent),
-    radial-gradient(1.5px 1.5px at 18% 60%,rgba(200,210,255,0.2),transparent),
-    /* 远景星 — 小而淡 (紫调) */
-    radial-gradient(1px 1px at 28% 35%,rgba(200,180,255,0.2),transparent),
-    radial-gradient(0.8px 0.8px at 48% 42%,rgba(200,180,255,0.15),transparent),
-    radial-gradient(1px 1px at 68% 32%,rgba(200,180,255,0.18),transparent),
-    radial-gradient(0.8px 0.8px at 82% 48%,rgba(200,180,255,0.12),transparent),
-    radial-gradient(1px 1px at 32% 62%,rgba(200,180,255,0.15),transparent),
-    radial-gradient(0.8px 0.8px at 58% 58%,rgba(200,180,255,0.18),transparent),
-    radial-gradient(1px 1px at 18% 45%,rgba(200,180,255,0.12),transparent),
-    radial-gradient(0.8px 0.8px at 95% 20%,rgba(200,180,255,0.15),transparent),
-    radial-gradient(1px 1px at 42% 88%,rgba(200,180,255,0.12),transparent),
-    radial-gradient(0.8px 0.8px at 70% 12%,rgba(200,180,255,0.15),transparent),
-    radial-gradient(1px 1px at 10% 30%,rgba(200,180,255,0.15),transparent),
-    radial-gradient(0.8px 0.8px at 52% 68%,rgba(200,180,255,0.12),transparent),
-    radial-gradient(1px 1px at 86% 36%,rgba(200,180,255,0.18),transparent),
-    radial-gradient(0.8px 0.8px at 22% 52%,rgba(200,180,255,0.12),transparent),
-    radial-gradient(1px 1px at 38% 76%,rgba(200,180,255,0.15),transparent),
-    radial-gradient(0.8px 0.8px at 64% 84%,rgba(200,180,255,0.12),transparent),
-    /* 极远景星 — 极淡散布 (大量) */
-    radial-gradient(0.6px 0.6px at 10% 5%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 38% 25%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 52% 15%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 62% 48%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 22% 65%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 45% 72%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 80% 25%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 90% 65%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 15% 90%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 75% 5%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 5% 12%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 30% 3%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 55% 8%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 70% 18%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 85% 42%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 28% 55%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 48% 60%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 68% 75%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 12% 78%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 35% 88%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 58% 95%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 82% 72%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(0.6px 0.6px at 95% 50%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(0.5px 0.5px at 40% 40%,rgba(255,255,255,0.08),transparent);
+    /* 柔和光点 */
+    radial-gradient(2px 2px at 20% 25%,rgba(255,255,255,0.8),transparent),
+    radial-gradient(1.5px 1.5px at 60% 15%,rgba(255,255,255,0.7),transparent),
+    radial-gradient(2.5px 2.5px at 80% 35%,rgba(255,255,255,0.6),transparent),
+    radial-gradient(1.5px 1.5px at 35% 50%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(2px 2px at 70% 60%,rgba(255,255,255,0.7),transparent),
+    radial-gradient(1px 1px at 15% 70%,rgba(255,255,255,0.6),transparent),
+    radial-gradient(2px 2px at 50% 80%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(1.5px 1.5px at 90% 75%,rgba(255,255,255,0.4),transparent),
+    radial-gradient(1px 1px at 45% 40%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(2px 2px at 10% 40%,rgba(255,255,255,0.6),transparent),
+    radial-gradient(1.5px 1.5px at 25% 85%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(1px 1px at 75% 45%,rgba(255,255,255,0.4),transparent);
     mask-image:radial-gradient(ellipse 100% 100% at 50% 50%,black 65%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 100% 100% at 50% 50%,black 65%,transparent 100%)}
   .password-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
-  .password-gate-card{display:flex;flex-direction:column;align-items:center;gap:20px;padding:48px 56px 40px;background:rgba(16,16,32,0.35);border:1px solid rgba(140,120,255,0.08);border-radius:20px;backdrop-filter:blur(16px) saturate(1.1);-webkit-backdrop-filter:blur(16px) saturate(1.1);box-shadow:0 0 60px rgba(124,111,240,0.04),0 0 120px rgba(100,140,255,0.02),inset 0 1px 0 rgba(255,255,255,0.04);position:relative}
+  .password-gate-card{display:flex;flex-direction:column;align-items:center;gap:20px;padding:48px 56px 40px;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.6);border-radius:20px;backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);box-shadow:0 8px 40px rgba(99,102,241,0.08),0 2px 12px rgba(0,0,0,0.04),inset 0 1px 0 rgba(255,255,255,0.8);position:relative}
   .password-gate-card::before{display:none}
   .password-gate-card::after{display:none}
-  .password-gate-icon{font-size:40px;margin-bottom:4px;filter:drop-shadow(0 0 16px rgba(124,111,240,0.35))}
-  .password-gate-title{font-size:30px;font-weight:800;color:#e0e0f0;letter-spacing:3px;background:linear-gradient(135deg,#e0e0f0 0%,#a78bfa 50%,#7c6ff0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .password-gate-sub{font-size:13px;color:rgba(160,160,200,0.6);letter-spacing:2.5px;text-transform:uppercase;margin-top:-4px;font-weight:300}
-  .password-gate-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(140,120,255,0.35),transparent);margin:2px 0}
+  .password-gate-icon{font-size:40px;margin-bottom:4px;filter:drop-shadow(0 0 12px rgba(99,102,241,0.2))}
+  .password-gate-title{font-size:30px;font-weight:800;color:#1e1e36;letter-spacing:3px;background:linear-gradient(135deg,#1e1e36 0%,#6366f1 50%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .password-gate-sub{font-size:13px;color:rgba(120,120,160,0.7);letter-spacing:2.5px;text-transform:uppercase;margin-top:-4px;font-weight:300}
+  .password-gate-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,0.3),transparent);margin:2px 0}
   .password-gate-box{display:flex;gap:10px;align-items:center;margin-top:4px}
-  .password-gate input{width:240px;padding:12px 16px;border-radius:12px;border:1px solid rgba(140,120,255,0.15);background:rgba(10,10,24,0.5);color:#e0e0f0;font-size:15px;outline:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:all .35s;letter-spacing:2px;box-shadow:inset 0 2px 4px rgba(0,0,0,0.2)}
-  .password-gate input:hover{border-color:rgba(140,120,255,0.3);box-shadow:0 0 20px rgba(124,111,240,0.08),inset 0 2px 4px rgba(0,0,0,0.2)}
-  .password-gate input:focus{border-color:rgba(140,120,255,0.45);box-shadow:0 0 28px rgba(124,111,240,0.15),0 0 60px rgba(124,111,240,0.05),inset 0 2px 4px rgba(0,0,0,0.2)}
-  .password-gate input::placeholder{color:rgba(120,120,160,0.35);letter-spacing:2px;font-weight:300;transition:color .3s}
-  .password-gate input:focus::placeholder{color:rgba(120,120,160,0.15)}
-  .password-gate button{padding:12px 28px;border-radius:12px;border:none;background:linear-gradient(145deg,#7c6ff0,#6366f1,#7c6ff0);background-size:200% 100%;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all .35s;white-space:nowrap;box-shadow:0 4px 24px rgba(124,111,240,0.2),0 0 40px rgba(124,111,240,0.05);letter-spacing:0.5px;position:relative;overflow:hidden}
-  .password-gate button:hover{background-position:100% 0;box-shadow:0 6px 32px rgba(124,111,240,0.3),0 0 60px rgba(124,111,240,0.1);transform:translateY(-1px)}
-  .password-gate button:active{transform:translateY(0);box-shadow:0 2px 16px rgba(124,111,240,0.2)}
-  .password-gate button::after{content:'';position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.08) 50%,transparent 60%);pointer-events:none}
-  .password-gate-error{font-size:13px;color:#ff6b6b;min-height:20px;text-align:center;font-weight:400;text-shadow:0 0 16px rgba(255,107,107,0.15);letter-spacing:0.3px}
-  .password-gate-footer{font-size:11px;color:rgba(120,120,160,0.35);letter-spacing:0.8px;margin-top:4px;font-weight:300}
+  .password-gate input{width:240px;padding:12px 16px;border-radius:12px;border:1px solid rgba(99,102,241,0.2);background:rgba(255,255,255,0.7);color:#1e1e36;font-size:15px;outline:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:all .35s;letter-spacing:2px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+  .password-gate input:hover{border-color:rgba(99,102,241,0.35);box-shadow:0 0 16px rgba(99,102,241,0.06),0 2px 8px rgba(0,0,0,0.04)}
+  .password-gate input:focus{border-color:rgba(99,102,241,0.45);box-shadow:0 0 24px rgba(99,102,241,0.1),0 2px 12px rgba(0,0,0,0.04)}
+  .password-gate input::placeholder{color:rgba(140,140,180,0.5);letter-spacing:2px;font-weight:300;transition:color .3s}
+  .password-gate input:focus::placeholder{color:rgba(140,140,180,0.25)}
+  .password-gate button{padding:12px 28px;border-radius:12px;border:none;background:linear-gradient(145deg,#6366f1,#818cf8,#6366f1);background-size:200% 100%;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all .35s;white-space:nowrap;box-shadow:0 4px 20px rgba(99,102,241,0.2);letter-spacing:0.5px;position:relative;overflow:hidden}
+  .password-gate button:hover{background-position:100% 0;box-shadow:0 6px 28px rgba(99,102,241,0.3);transform:translateY(-1px)}
+  .password-gate button:active{transform:translateY(0);box-shadow:0 2px 12px rgba(99,102,241,0.2)}
+  .password-gate button::after{content:'';position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.1) 50%,transparent 60%);pointer-events:none}
+  .password-gate-error{font-size:13px;color:#ef4444;min-height:20px;text-align:center;font-weight:400;letter-spacing:0.3px}
+  .password-gate-footer{font-size:11px;color:rgba(120,120,160,0.5);letter-spacing:0.8px;margin-top:4px;font-weight:300}
   @media(max-width:480px){
     .password-gate-card{padding:36px 28px 32px;border-radius:16px;margin:0 16px}
     .password-gate-title{font-size:24px}

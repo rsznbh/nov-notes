@@ -678,7 +678,7 @@
     }
 
     // 星云团
-    var nebulaColors = ['rgba(124,111,240,', 'rgba(99,102,241,', 'rgba(167,139,250,', 'rgba(34,211,238,'];
+    var nebulaColors = ['rgba(129,140,248,', 'rgba(99,102,241,', 'rgba(165,180,252,', 'rgba(34,211,238,'];
     for (var n = 0; n < 4; n++) {
       nebulae.push({
         x: Math.random() * W, y: Math.random() * H,
