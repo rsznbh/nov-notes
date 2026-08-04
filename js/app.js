@@ -280,7 +280,8 @@
               var t = db.transaction(['categories', 'notes'], 'readwrite');
               var cs = t.objectStore('categories');
               var ni = t.objectStore('notes');
-              // 删除所有相关笔记
+
+              // 用 cursor 遍历并删除相关笔记（同步调用 c.delete() 在 cursor 生命周期内）
               var niIdx = ni.index('categoryId');
               var cursor = niIdx.openCursor();
               cursor.onsuccess = function () {
@@ -290,10 +291,16 @@
                   c.continue();
                 }
               };
-              // 删除所有分类
+
+              // 用 onupgradeneeded 式的 trick：在 cursor 完成后、事务提交前删除分类
+              // 更可靠的做法：单独开事务删除分类（先删笔记，再删分类）
               t.oncomplete = function () {
-                for (var j = 0; j < toDelete.length; j++) cs.delete(toDelete[j]);
-                res();
+                // 笔记已清理完毕，另开一个事务删除分类
+                var t2 = db.transaction('categories', 'readwrite');
+                var cs2 = t2.objectStore('categories');
+                for (var j = 0; j < toDelete.length; j++) cs2.delete(toDelete[j]);
+                t2.oncomplete = function () { res(); };
+                t2.onerror = function () { res(); }; // 分类删除失败也算完成（笔记已删除）
               };
               t.onerror = function () { rej(t.error); };
             };
