@@ -1462,7 +1462,7 @@
       '<p>适合管理芯片调试日志、底层驱动笔记、RTOS 学习资料、通信协议分析、项目踩坑记录等技术文档。</p>' +
       '<hr style="border:none;border-top:1px solid var(--border-color);margin:20px 0">' +
       '<h3>快捷键</h3>' +
-      '<ul><li><code>Ctrl + K</code> — 聚焦搜索框</li>' +
+      '<ul><li><code>Ctrl + F</code> — 聚焦搜索框</li>' +
       '<li><code>Ctrl + S</code> — 编辑器中保存笔记</li>' +
       '<li><code>Escape</code> — 关闭弹窗 / 搜索</li>' +
       '<li><code>Tab</code> — 编辑器中插入空格</li></ul>' +
@@ -1947,7 +1947,7 @@
       });
 
       document.addEventListener('keydown', function (e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); searchInput.focus(); searchInput.select(); }
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'f' || e.key === 'k')) { e.preventDefault(); searchInput.focus(); searchInput.select(); }
         if (e.key === 'Escape') { searchResults.classList.remove('active'); searchInput.blur(); }
       });
 
