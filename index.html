@@ -261,6 +261,8 @@
   .modal-title{font-size:16px;font-weight:600;margin-bottom:16px}
   .modal-input{width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);font-size:14px;outline:none;margin-bottom:16px}
   .modal-input:focus{border-color:var(--accent)}
+  .modal-select{width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);font-size:14px;outline:none;margin-bottom:16px}
+  .modal-select:focus{border-color:var(--accent)}
   .modal-actions{display:flex;gap:8px;justify-content:flex-end}
 
   /* ==================== 关于页面 ==================== */
@@ -537,6 +539,18 @@
   <!-- MD 文件导入 / JSON 备份 -->
   <input type="file" id="md-file-input" accept=".md,.markdown,.txt" multiple style="display:none">
   <input type="file" id="json-file-input" accept=".json" style="display:none">
+
+  <!-- 分类选择弹窗（导入用） -->
+  <div class="modal-overlay" id="cat-picker-overlay">
+    <div class="modal-box">
+      <div class="modal-title" id="cat-picker-title">选择目标分类</div>
+      <select class="modal-select" id="cat-picker-select"></select>
+      <div class="modal-actions">
+        <button class="editor-btn" id="cat-picker-cancel">取消</button>
+        <button class="editor-btn primary" id="cat-picker-confirm">确定</button>
+      </div>
+    </div>
+  </div>
 
   <!-- 主脚本 -->
   <!-- 密码门卫 + 应用加载 -->

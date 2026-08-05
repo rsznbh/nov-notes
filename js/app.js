@@ -1928,6 +1928,41 @@
     container.addEventListener('click', container._searchClick);
   }
 
+  // 分类选择弹窗（导入用）
+  function showCategoryPicker(onSelect) {
+    var overlay = document.getElementById('cat-picker-overlay');
+    var sel = document.getElementById('cat-picker-select');
+    storage.getAllCategories().then(function (cats) {
+      sel.innerHTML = '';
+      for (var i = 0; i < cats.length; i++) {
+        var opt = document.createElement('option');
+        opt.value = cats[i].id;
+        opt.textContent = cats[i].name;
+        sel.appendChild(opt);
+      }
+      overlay.classList.add('active');
+    });
+    var ok = document.getElementById('cat-picker-confirm');
+    var cancel = document.getElementById('cat-picker-cancel');
+    var handler = function () {
+      overlay.classList.remove('active');
+      if (sel.value) onSelect(sel.value);
+      ok.removeEventListener('click', handler);
+      cancel.removeEventListener('click', cleaner);
+      sel.removeEventListener('keydown', kh);
+    };
+    var cleaner = function () {
+      overlay.classList.remove('active');
+      ok.removeEventListener('click', handler);
+      cancel.removeEventListener('click', cleaner);
+      sel.removeEventListener('keydown', kh);
+    };
+    var kh = function (e) { if (e.key === 'Enter') handler(); if (e.key === 'Escape') cleaner(); };
+    ok.addEventListener('click', handler);
+    cancel.addEventListener('click', cleaner);
+    sel.addEventListener('keydown', kh);
+  }
+
   // ==================== 模态框 ====================
 
   function showModal(title, value, onConfirm) {
@@ -2291,7 +2326,13 @@
       });
 
       // 侧边栏：导入 MD 文件
-      document.getElementById('btn-import-md').addEventListener('click', function () { document.getElementById('md-file-input').click(); });
+      document.getElementById('btn-import-md').addEventListener('click', function () {
+        showCategoryPicker(function (catId) {
+          var btn = document.getElementById('btn-import-md');
+          btn.dataset.targetCatId = catId;
+          document.getElementById('md-file-input').click();
+        });
+      });
 
       // 顶部：导入 JSON 备份
       document.getElementById('btn-import').addEventListener('click', function () { document.getElementById('json-file-input').click(); });
@@ -2300,21 +2341,23 @@
       document.getElementById('md-file-input').addEventListener('change', async function (e) {
         var files = Array.from(e.target.files);
         if (!files.length) return;
-        var cats = await storage.getAllCategories();
-        if (!cats.length) { alert('请先创建一个分类再导入笔记。'); return; }
-        var target = cats[0];
+        var btn = document.getElementById('btn-import-md');
+        var catId = btn.dataset.targetCatId;
+        if (!catId) { alert('请先点击侧边栏的导入按钮选择分类。'); return; }
         var count = 0;
         for (var i = 0; i < files.length; i++) {
           var txt = await files[i].text();
           var h1 = txt.match(/^#\s+(.+)$/m);
           var title = h1 ? h1[1].trim() : files[i].name.replace(/\.(md|markdown|txt)$/i, '');
-          await storage.addNote({ title: title, content: txt, categoryId: target.id, tags: [] });
+          await storage.addNote({ title: title, content: txt, categoryId: parseInt(catId), tags: [] });
           count++;
         }
         var all = await storage.getAllNotes(); rebuildSearchIndex(all);
         document.getElementById('md-file-input').value = '';
-        await renderSidebar(); navigateTo(null);
-        alert('成功导入 ' + count + ' 篇笔记到「' + target.name + '」分类。');
+        delete btn.dataset.targetCatId;
+        await renderSidebar();
+        navigateTo(parseInt(catId));
+        alert('成功导入 ' + count + ' 篇笔记。');
       });
 
       // JSON 备份导入（恢复）
