@@ -121,7 +121,9 @@
   .cat-action-btn{width:20px;height:20px;background:none;border:none;border-radius:3px;color:var(--text-muted);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
   .cat-action-btn:hover{background:var(--bg-tertiary);color:var(--text-primary)}
   .category-notes{display:none;padding-left:20px}
-  .category-notes.open{display:block}
+  .category-notes.open{display:block;max-height:180px;overflow-y:auto;scrollbar-width:thin}
+  .category-notes.open::-webkit-scrollbar{width:4px}
+  .category-notes.open::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:2px}
   .note-item{padding:4px 12px;font-size:14px;color:var(--text-secondary);cursor:pointer;border-radius:3px;margin:1px 6px;transition:background .1s,color .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:2px;user-select:none}
   .note-item:hover{background:var(--bg-hover);color:var(--text-primary)}
   .note-item.active{background:var(--accent-bg);color:var(--accent)}
@@ -261,8 +263,13 @@
   .modal-title{font-size:16px;font-weight:600;margin-bottom:16px}
   .modal-input{width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);font-size:14px;outline:none;margin-bottom:16px}
   .modal-input:focus{border-color:var(--accent)}
-  .modal-select{width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);font-size:14px;outline:none;margin-bottom:16px}
+  .modal-select{width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);font-size:14px;outline:none;margin-bottom:16px;min-height:120px;max-height:200px;overflow-y:auto}
   .modal-select:focus{border-color:var(--accent)}
+  .modal-select option{padding:6px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* 分类选择弹窗特殊样式 */
+  .cat-picker-modal{width:420px}
+  .cat-picker-search{margin-bottom:8px}
+  .cat-picker-modal select{margin-top:8px}
   .modal-actions{display:flex;gap:8px;justify-content:flex-end}
 
   /* ==================== 关于页面 ==================== */
@@ -542,9 +549,10 @@
 
   <!-- 分类选择弹窗（导入用） -->
   <div class="modal-overlay" id="cat-picker-overlay">
-    <div class="modal-box">
+    <div class="modal-box cat-picker-modal">
       <div class="modal-title" id="cat-picker-title">选择目标分类</div>
-      <select class="modal-select" id="cat-picker-select"></select>
+      <input type="text" class="modal-input cat-picker-search" id="cat-picker-search" placeholder="搜索分类…">
+      <select class="modal-select" id="cat-picker-select" size="5"></select>
       <div class="modal-actions">
         <button class="editor-btn" id="cat-picker-cancel">取消</button>
         <button class="editor-btn primary" id="cat-picker-confirm">确定</button>

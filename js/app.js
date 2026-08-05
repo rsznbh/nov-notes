@@ -1928,39 +1928,56 @@
     container.addEventListener('click', container._searchClick);
   }
 
-  // 分类选择弹窗（导入用）
+  // 分类选择弹窗（导入用，带搜索）
   function showCategoryPicker(onSelect) {
     var overlay = document.getElementById('cat-picker-overlay');
     var sel = document.getElementById('cat-picker-select');
-    storage.getAllCategories().then(function (cats) {
+    var searchInput = document.getElementById('cat-picker-search');
+    var allCats = [];
+    var filterFn = function () {
+      var q = searchInput.value.toLowerCase().trim();
       sel.innerHTML = '';
-      for (var i = 0; i < cats.length; i++) {
+      for (var i = 0; i < allCats.length; i++) {
+        if (q && allCats[i].name.toLowerCase().indexOf(q) === -1) continue;
         var opt = document.createElement('option');
-        opt.value = cats[i].id;
-        opt.textContent = cats[i].name;
+        opt.value = allCats[i].id;
+        opt.textContent = allCats[i].name;
         sel.appendChild(opt);
       }
+      if (sel.options.length > 0) sel.selectedIndex = 0;
+    };
+
+    storage.getAllCategories().then(function (cats) {
+      allCats = cats;
+      searchInput.value = '';
+      filterFn();
       overlay.classList.add('active');
+      setTimeout(function () { searchInput.focus(); }, 50);
     });
+
     var ok = document.getElementById('cat-picker-confirm');
     var cancel = document.getElementById('cat-picker-cancel');
     var handler = function () {
       overlay.classList.remove('active');
-      if (sel.value) onSelect(sel.value);
-      ok.removeEventListener('click', handler);
-      cancel.removeEventListener('click', cleaner);
-      sel.removeEventListener('keydown', kh);
+      if (sel.options.length > 0 && sel.value) onSelect(sel.value);
+      cleanup();
     };
-    var cleaner = function () {
+    var cleanup = function () {
       overlay.classList.remove('active');
       ok.removeEventListener('click', handler);
       cancel.removeEventListener('click', cleaner);
       sel.removeEventListener('keydown', kh);
+      searchInput.removeEventListener('input', filterFn);
+      searchInput.removeEventListener('keydown', searchKh);
     };
-    var kh = function (e) { if (e.key === 'Enter') handler(); if (e.key === 'Escape') cleaner(); };
+    var cleaner = function () { cleanup(); };
+    var kh = function (e) { if (e.key === 'Enter') handler(); if (e.key === 'Escape') cleanup(); };
+    var searchKh = function (e) { if (e.key === 'Enter') { e.preventDefault(); handler(); } if (e.key === 'Escape') cleanup(); };
     ok.addEventListener('click', handler);
     cancel.addEventListener('click', cleaner);
     sel.addEventListener('keydown', kh);
+    searchInput.addEventListener('input', filterFn);
+    searchInput.addEventListener('keydown', searchKh);
   }
 
   // ==================== 模态框 ====================
