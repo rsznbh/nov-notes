@@ -1449,9 +1449,7 @@
           '<span class="drag-handle" draggable="true" data-drag-note="' + notes[j].id + '" title="拖动排序或移动">☰</span>' +
           '<span class="note-item-title">' + escHtml(notes[j].title) + '</span>' +
           '<span class="note-date">' + formatDate(notes[j].updatedAt) + '</span>' +
-          '<span class="note-item-actions">' +
-          '<button class="note-action-btn btn-delete-note-inline" data-note-id="' + notes[j].id + '" title="删除">✕</button>' +
-          '</span></div>';
+          '<span class="note-action-btn btn-delete-note-inline" data-note-id="' + notes[j].id + '" title="删除" style="margin-left:6px;cursor:pointer">✕</span></div>';
       }
       html += '<div class="note-item note-item-add" data-cat-add="' + cat.id + '" draggable="false" style="color:var(--accent);opacity:.6;padding-left:' + (12 + indent + 16) + 'px">+ 新建笔记</div>';
     }
