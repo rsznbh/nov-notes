@@ -376,8 +376,8 @@
   </style>
 </head>
 <body>
-  <!-- 密码门卫 — 银河深空（已关闭，保留代码） -->
-  <div class="password-gate" id="password-gate" style="display:none">
+  <!-- 密码门卫 — 银河深空 -->
+  <div class="password-gate" id="password-gate" style="display:flex">
     <div class="password-gate-card">
       <div class="password-gate-icon">🌌</div>
       <div class="password-gate-title">NOV. NOTE</div>
@@ -408,7 +408,7 @@
             <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
           </svg>
         </button>
-        <div class="logo" id="btn-home" title="返回首页" style="cursor:pointer"><span class="logo-icon">📓</span>Nov.</div>
+        <div class="logo" id="btn-home" title="返回首页" style="cursor:pointer"><span class="logo-icon">📓</span>Nov. Note</div>
       </div>
       <div class="header-center">
         <div class="search-wrapper">
@@ -545,7 +545,7 @@
   </div>
 
   <!-- MD 文件导入 / JSON 备份 -->
-  <input type="file" id="md-file-input" accept=".md,.markdown,.txt" multiple style="display:none">
+  <input type="file" id="md-file-input" accept=".md,.markdown,.txt" multiple webkitdirectory directory style="display:none">
   <input type="file" id="json-file-input" accept=".json" style="display:none">
 
   <!-- 分类选择弹窗（导入用） -->
@@ -566,7 +566,7 @@
   <script>
   // 🔒 密码门卫 —— 修改此处密码即可（当前已关闭，保留代码以便重新启用）
   var GATE_PASSWORD = '2026';
-  var GATE_ENABLED = false; // 设为 true 重新启用密码登录
+  var GATE_ENABLED = true; // 设为 true 重新启用密码登录
 
   (function() {
     var gate = document.getElementById('password-gate');
