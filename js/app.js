@@ -885,24 +885,10 @@
     if (isMobile) return;
     var pet = document.getElementById('pet');
     if (!pet) return;
-    // 检查用户是否之前关闭过桌宠
-    if (localStorage.getItem('nov-pet-hidden') === '1') {
-      pet.style.display = 'none';
-    }
     var speech = document.getElementById('pet-speech');
     var pupilL = document.querySelector('.pet-pupil-l');
     var pupilR = document.querySelector('.pet-pupil-r');
     var mouth = document.getElementById('pet-mouth');
-    var closeBtn = document.getElementById('pet-close');
-
-    // 关闭按钮
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        pet.style.display = 'none';
-        localStorage.setItem('nov-pet-hidden', '1');
-      });
-    }
     var bubble = document.getElementById('bubble');
 
     // 眼睛跟随鼠标
@@ -1025,7 +1011,6 @@
             setTimeout(function () { pet.classList.remove('pet-sleeping'); showSpeech('醒了！'); }, 3000);
           } else if (act === 'exit') {
             pet.style.display = 'none';
-            localStorage.setItem('nov-pet-hidden', '1');
           }
           closeMenu();
         });
