@@ -1448,7 +1448,10 @@
         html += '<div class="note-item' + (notes[j].id === activeNoteId ? ' active' : '') + '" data-note-id="' + notes[j].id + '" draggable="true" style="padding-left:' + (12 + indent + 16) + 'px">' +
           '<span class="drag-handle" draggable="true" data-drag-note="' + notes[j].id + '" title="拖动排序或移动">☰</span>' +
           '<span class="note-item-title">' + escHtml(notes[j].title) + '</span>' +
-          '<span class="note-date">' + formatDate(notes[j].updatedAt) + '</span></div>';
+          '<span class="note-date">' + formatDate(notes[j].updatedAt) + '</span>' +
+          '<span class="note-item-actions">' +
+          '<button class="note-action-btn btn-delete-note-inline" data-note-id="' + notes[j].id + '" title="删除">✕</button>' +
+          '</span></div>';
       }
       html += '<div class="note-item note-item-add" data-cat-add="' + cat.id + '" draggable="false" style="color:var(--accent);opacity:.6;padding-left:' + (12 + indent + 16) + 'px">+ 新建笔记</div>';
     }
@@ -2077,6 +2080,20 @@
           if (confirm('确定删除该分类及其所有笔记？此操作不可恢复。')) {
             storage.deleteCategory(did).then(function () { if (activeCatId === did) activeCatId = null; renderSidebar(); navigateTo(null); });
           }
+          return;
+        }
+        // 侧边栏直接删除笔记
+        var delNoteBtn = target.closest('.btn-delete-note-inline');
+        if (delNoteBtn) {
+          var nid = parseInt(delNoteBtn.dataset.noteId);
+          if (confirm('确定删除这篇笔记？此操作不可恢复。')) {
+            storage.deleteNote(nid).then(function () {
+              if (activeNoteId === nid) { activeNoteId = null; }
+              renderSidebar();
+              navigateTo(null);
+            });
+          }
+          e.stopPropagation();
           return;
         }
         var subcatBtn = target.closest('.btn-add-subcat');

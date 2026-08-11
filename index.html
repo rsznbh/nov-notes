@@ -120,6 +120,10 @@
   .category-header:hover .category-actions{display:flex}
   .cat-action-btn{width:20px;height:20px;background:none;border:none;border-radius:3px;color:var(--text-muted);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
   .cat-action-btn:hover{background:var(--bg-tertiary);color:var(--text-primary)}
+  .note-item-actions{display:none;gap:2px;margin-left:auto;flex-shrink:0}
+  .note-item:hover .note-item-actions{display:flex}
+  .note-item-actions .btn-delete-note-inline{width:20px;height:20px;background:none;border:none;border-radius:3px;color:var(--text-muted);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
+  .note-item-actions .btn-delete-note-inline:hover{color:var(--accent);background:var(--bg-tertiary)}
   .category-notes{display:none;padding-left:20px}
   .category-notes.open{display:block;max-height:180px;overflow-y:auto;scrollbar-width:thin}
   .category-notes.open::-webkit-scrollbar{width:4px}
