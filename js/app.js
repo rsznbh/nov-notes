@@ -1524,10 +1524,21 @@
     // 首页「分类入口」只显示根分类（一级目录），点击进入后可看到下级子目录
     var roots = cats.filter(function (c) { return c.parentId === null || c.parentId === undefined; });
     roots.sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+
+    // 构建 byParentMap 用于递归统计
+    var byParentMap = {};
+    for (var cm = 0; cm < cats.length; cm++) {
+      var pid = (cats[cm].parentId === undefined) ? null : cats[cm].parentId;
+      if (pid !== null) {
+        if (!byParentMap[pid]) byParentMap[pid] = [];
+        byParentMap[pid].push(cats[cm]);
+      }
+    }
+
     for (var i = 0; i < roots.length; i++) {
-      var cnt = notes.filter(function (n) { return n.categoryId === roots[i].id; }).length;
+      var totalCnt = countNotesRecursive(roots[i].id, byParentMap, catNotesMap);
       var subCnt = cats.filter(function (c) { return c.parentId === roots[i].id; }).length;
-      var info = cnt + ' 篇笔记';
+      var info = totalCnt + ' 篇笔记';
       if (subCnt > 0) info += ' · ' + subCnt + ' 个子目录';
       html += '<div class="category-card" data-home-cat="' + roots[i].id + '">' +
         '<div class="category-card-title">' + escHtml(roots[i].name) + '</div>' +
