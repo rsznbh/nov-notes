@@ -301,6 +301,9 @@
   .pet{position:fixed;bottom:60px;left:50px;z-index:500;width:106px;height:91px;cursor:grab;user-select:none;-webkit-user-select:none;-moz-user-select:none}
   .pet:active{cursor:grabbing}
   .pet-svg{width:106px;height:91px;overflow:visible;image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges}
+  .pet-close{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:50%;color:var(--text-muted);font-size:11px;line-height:16px;text-align:center;cursor:pointer;opacity:0;transition:opacity .2s,color .2s;display:flex;align-items:center;justify-content:center;z-index:2}
+  .pet:hover .pet-close{opacity:1}
+  .pet-close:hover{color:var(--accent)}
   .pet-speech{position:absolute;bottom:95px;left:50%;transform:translateX(-50%);background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--text-secondary);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:1}
   .pet-speech.show{opacity:1}
   .pet-speech::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid var(--border-color)}
@@ -462,6 +465,7 @@
 
   <!-- 桌宠 — 像素小螃蟹 -->
   <div class="pet" id="pet">
+    <div class="pet-close" id="pet-close" title="隐藏桌宠">✕</div>
     <div class="pet-speech" id="pet-speech"></div>
     <svg class="pet-svg" viewBox="0 0 132 114" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
       <!-- 身体阴影 -->
